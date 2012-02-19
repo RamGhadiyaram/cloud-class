@@ -12,13 +12,9 @@
     <path id="classpath.base">
         <pathelement location="${build}" />
         <pathelement location="${src}" />
-    </path>
-
-    <path id="classpath.test">
         <fileset dir="${lib}">
             <include name="**/*.jar" />
         </fileset>
-        <path refid="classpath.base" />
     </path>
 
     <!-- target: init -->
