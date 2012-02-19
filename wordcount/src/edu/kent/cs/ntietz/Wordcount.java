@@ -46,8 +46,24 @@ public class Wordcount
     }
 
     public static void main(String... args)
+    throws IOException
     {
+        JobConf conf = new JobConf(Wordcount.class);
+        conf.setJobName("wordcount");
 
+        conf.setOutputKeyClass(Text.class);
+        conf.setOutputValueClass(IntWritable.class);
+
+        conf.setMapperClass(Map.class);
+        conf.setReducerClass(Reduce.class);
+
+        conf.setInputFormat(TextInputFormat.class);
+        conf.setOutputFormat(TextOutputFormat.class);
+
+        FileInputFormat.setInputPaths(conf, new Path(args[0]));
+        FileOutputFormat.setOutputPath(conf, new Path(args[1]));
+
+        JobClient.runJob(conf);
     }
 }
 
