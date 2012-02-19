@@ -33,7 +33,7 @@ public class Pairs
                 {
                     if (i != j)
                     {
-                        String pair = String.valueOf(i) + " " + String.valueOf(j);
+                        String pair = String.valueOf(words.get(i)) + " " + String.valueOf(words.get(j));
                         output.collect(new Text(pair), new IntWritable(1));
                     }
                 }
