@@ -12,9 +12,9 @@ import org.apache.hadoop.util.*;
 public class Stripes
 {
 
-    public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable>
+    public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, MapWritable>
     {
-        public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> output, Reporter reporter)
+        public void map(LongWritable key, Text value, OutputCollector<Text, MapWritable > output, Reporter reporter)
         throws IOException
         {
             String line = value.toString();
@@ -29,29 +29,57 @@ public class Stripes
 
             for (int i = 0; i < words.size(); ++i)
             {
+                MapWritable stripe = new MapWritable();
+
+                Text current = new Text(words.get(i));
+
                 for (int j = 0; j < words.size(); ++j)
                 {
                     if (i != j)
                     {
-                        String pair = String.valueOf(words.get(i)) + " " + String.valueOf(words.get(j));
-                        output.collect(new Text(pair), new IntWritable(1));
+                        if (stripe.get(current) == null)
+                        {
+                            stripe.put(current, new IntWritable(1));
+                        }
+                        else
+                        {
+                            stripe.put(current, new IntWritable(((IntWritable)stripe.get(current)).get()+1));
+                        }
                     }
                 }
+
+                output.collect(new Text(words.get(i)), stripe);
             }
         }
     }
 
-    public static class Reduce extends MapReduceBase implements Reducer<Text, IntWritable, Text, IntWritable>
+    public static class Reduce extends MapReduceBase implements Reducer<Text, MapWritable, Text, MapWritable>
     {
-        public void reduce(Text key, Iterator<IntWritable> values, OutputCollector<Text, IntWritable> output, Reporter reporter)
+        public void reduce(Text key, Iterator<MapWritable> values, OutputCollector<Text, MapWritable> output, Reporter reporter)
         throws IOException
         {
-            int sum = 0;
+            MapWritable result = new MapWritable();
+
             while (values.hasNext())
             {
-                sum += values.next().get();
+                MapWritable nextStripe = values.next();
+
+                for (Writable wCurrent : nextStripe.keySet())
+                {
+                    Text current = (Text)wCurrent;
+
+                    if (!result.containsKey(current))
+                    {
+                        result.put(key, nextStripe.get(current));
+                    }
+                    else
+                    {
+                        result.put(key, new IntWritable(((IntWritable)result.get(wCurrent)).get() + ((IntWritable)nextStripe.get(wCurrent)).get()));
+                    }
+                }
             }
-            output.collect(key, new IntWritable(sum));
+
+            output.collect(key, result);
         }
     }
 
