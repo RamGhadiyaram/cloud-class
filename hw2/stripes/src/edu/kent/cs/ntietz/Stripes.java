@@ -37,25 +37,26 @@ public class Stripes
                 {
                     if (i != j)
                     {
-                        if (stripe.get(current) == null)
+                        Text other = new Text(words.get(j));
+                        if (stripe.get(other) == null)
                         {
-                            stripe.put(current, new IntWritable(1));
+                            stripe.put(other, new IntWritable(1));
                         }
                         else
                         {
-                            stripe.put(current, new IntWritable(((IntWritable)stripe.get(current)).get()+1));
+                            stripe.put(other, new IntWritable(((IntWritable)stripe.get(current)).get()+1));
                         }
                     }
                 }
 
-                output.collect(new Text(words.get(i)), stripe);
+                output.collect(current, stripe);
             }
         }
     }
 
-    public static class Reduce extends MapReduceBase implements Reducer<Text, MapWritable, Text, MapWritable>
+    public static class Reduce extends MapReduceBase implements Reducer<Text, MapWritable, Text, Text>
     {
-        public void reduce(Text key, Iterator<MapWritable> values, OutputCollector<Text, MapWritable> output, Reporter reporter)
+        public void reduce(Text key, Iterator<MapWritable> values, OutputCollector<Text, Text> output, Reporter reporter)
         throws IOException
         {
             MapWritable result = new MapWritable();
@@ -70,16 +71,26 @@ public class Stripes
 
                     if (!result.containsKey(current))
                     {
-                        result.put(key, nextStripe.get(current));
+                        result.put(current, nextStripe.get(current));
                     }
                     else
                     {
-                        result.put(key, new IntWritable(((IntWritable)result.get(wCurrent)).get() + ((IntWritable)nextStripe.get(wCurrent)).get()));
+                        result.put(current, new IntWritable(((IntWritable)result.get(wCurrent)).get() + ((IntWritable)nextStripe.get(wCurrent)).get()));
                     }
                 }
             }
 
-            output.collect(key, result);
+            String outputText = new String();
+            for (Writable wEach : result.keySet())
+            {
+                Text each = (Text)wEach;
+                Integer times = ((IntWritable)result.get(each)).get();
+
+                outputText += each.toString() + ":" + String.valueOf(times) + " ";
+            }
+            //output.collect(key, result);
+            // TODO: fix this so it outputs correctly
+            output.collect(key, new Text(outputText));
         }
     }
 
@@ -90,7 +101,7 @@ public class Stripes
         conf.setJobName("wordcount");
 
         conf.setOutputKeyClass(Text.class);
-        conf.setOutputValueClass(IntWritable.class);
+        conf.setOutputValueClass(MapWritable.class);
 
         conf.setMapperClass(Map.class);
         conf.setReducerClass(Reduce.class);
