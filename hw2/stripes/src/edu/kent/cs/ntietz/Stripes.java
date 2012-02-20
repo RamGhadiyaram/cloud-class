@@ -60,6 +60,7 @@ public class Stripes
         throws IOException
         {
             MapWritable result = new MapWritable();
+            int totalCount = 0;
 
             while (values.hasNext())
             {
@@ -77,6 +78,8 @@ public class Stripes
                     {
                         result.put(current, new IntWritable(((IntWritable)result.get(wCurrent)).get() + ((IntWritable)nextStripe.get(wCurrent)).get()));
                     }
+
+                    totalCount += ((IntWritable)nextStripe.get(wCurrent)).get();
                 }
             }
 
@@ -85,11 +88,10 @@ public class Stripes
             {
                 Text each = (Text)wEach;
                 Integer times = ((IntWritable)result.get(each)).get();
+                double probability = ((double)times) / totalCount;
 
-                outputText += each.toString() + ":" + String.valueOf(times) + " ";
+                outputText += each.toString() + ":" + String.valueOf(times) + "," + probability + "        ";
             }
-            //output.collect(key, result);
-            // TODO: fix this so it outputs correctly
             output.collect(key, new Text(outputText));
         }
     }
