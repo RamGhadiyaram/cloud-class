@@ -13,7 +13,6 @@ public class ParagraphRecordReader
     implements RecordReader<LongWritable, Text>
 {
     private LineRecordReader recordReader;
-    private String leftovers;
 
     public ParagraphRecordReader( Configuration conf
                                , FileSplit split
@@ -79,8 +78,7 @@ public class ParagraphRecordReader
         boolean getMore = true;
         boolean retrieved = false;
 
-        String result = leftovers;
-        leftovers = "";
+        String result = "";
 
         value.clear();
 
@@ -88,23 +86,11 @@ public class ParagraphRecordReader
         {
             retrieved = recordReader.next(key, line);
 
-            if (retrieved)
+            if (!(line.toString().trim().isEmpty()))
             {
                 String lineValue = line.toString();
 
-                // here, we assume sentences run until the period.
-                int endOfParagraph = lineValue.indexOf('.');
-
-                if (endOfParagraph == -1)
-                {
-                    result += " " + lineValue;
-                }
-                else
-                {
-                    result += " " + lineValue.substring(0, endOfParagraph+1);
-                    leftovers = lineValue.substring(endOfParagraph+1);
-                    getMore = false;
-                }
+                result += " " + lineValue;
             }
             else
             {
