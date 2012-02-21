@@ -68,8 +68,7 @@ public class ParagraphRecordReader
         return recordReader.getProgress();
     }
 
-    /* Finds a full sentence and sets it as the value.
-     * If the sentence is shorter than the full line, the rest is stored to use later.
+    /* Finds a full paragraph and sets it as the value.
      */
     public synchronized boolean next(LongWritable key, Text value)
     throws IOException
@@ -77,6 +76,7 @@ public class ParagraphRecordReader
         Text line = new Text();
         boolean getMore = true;
         boolean retrieved = false;
+        boolean gotSomething = false;
 
         String result = "";
 
@@ -84,24 +84,23 @@ public class ParagraphRecordReader
 
         while ( getMore )
         {
+            line.clear();
             retrieved = recordReader.next(key, line);
 
-            if (!(line.toString().trim().isEmpty()))
+            if (line.toString().length() > 0)
             {
                 String lineValue = line.toString();
-
                 result += " " + lineValue;
+                gotSomething = true;
             }
             else
             {
                 getMore = false;
-                value.set(result);
-                return false;
             }
         }
 
         value.set(result);
-        return true;
+        return appended;
     }
 }
 
