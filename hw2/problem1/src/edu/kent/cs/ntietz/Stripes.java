@@ -100,7 +100,7 @@ public class Stripes
     throws IOException
     {
         JobConf conf = new JobConf(Stripes.class);
-        conf.setJobName("wordcount");
+        conf.setJobName("problem1-stripes");
 
         conf.setOutputKeyClass(Text.class);
         conf.setOutputValueClass(MapWritable.class);
@@ -113,6 +113,7 @@ public class Stripes
 
         FileInputFormat.setInputPaths(conf, new Path(args[0]));
         FileOutputFormat.setOutputPath(conf, new Path(args[1]));
+        FileOutputFormat.setCompressOutput(conf, false);
 
         JobClient.runJob(conf);
     }

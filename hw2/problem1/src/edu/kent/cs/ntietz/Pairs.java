@@ -132,7 +132,7 @@ public class Pairs
     throws IOException
     {
         JobConf conf = new JobConf(Pairs.class);
-        conf.setJobName("wordcount");
+        conf.setJobName("problem1-pairs");
 
         conf.setOutputKeyClass(KeyPair.class);
         conf.setOutputValueClass(IntWritable.class);
@@ -145,6 +145,7 @@ public class Pairs
 
         FileInputFormat.setInputPaths(conf, new Path(args[0]));
         FileOutputFormat.setOutputPath(conf, new Path(args[1]));
+        FileOutputFormat.setCompressOutput(conf, false);
 
         JobClient.runJob(conf);
     }
