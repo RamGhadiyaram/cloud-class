@@ -111,6 +111,8 @@ public class Stripes
         conf.setInputFormat(ParagraphInputFormat.class);
         conf.setOutputFormat(TextOutputFormat.class);
 
+        conf.setNumReduceTasks(8);
+
         FileInputFormat.setInputPaths(conf, new Path(args[0]));
         FileOutputFormat.setOutputPath(conf, new Path(args[1]));
         FileOutputFormat.setCompressOutput(conf, false);
