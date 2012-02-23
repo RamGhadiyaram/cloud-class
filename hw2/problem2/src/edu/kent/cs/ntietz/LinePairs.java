@@ -25,13 +25,20 @@ public class LinePairs
         conf.setMapperClass(PairMapper.class);
         conf.setReducerClass(PairReducer.class);
 
-        conf.setInputFormat(TextInputFormat.class);
+        if (args[0].equals("line")) {
+            conf.setInputFormat(TextInputFormat.class);
+        } else if (args[0].equals("sentence")) {
+            conf.setInputFormat(SentenceInputFormat.class);
+        } else if (args[0].equals("paragraph")) {
+            conf.setInputFormat(ParagraphInputFormat.class);
+        }
+
         conf.setOutputFormat(TextOutputFormat.class);
 
         conf.setNumReduceTasks(8);
 
-        FileInputFormat.setInputPaths(conf, new Path(args[0]));
-        FileOutputFormat.setOutputPath(conf, new Path(args[1]));
+        FileInputFormat.setInputPaths(conf, new Path(args[1]));
+        FileOutputFormat.setOutputPath(conf, new Path(args[2]));
         FileOutputFormat.setCompressOutput(conf, false); 
 
         JobClient.runJob(conf);
