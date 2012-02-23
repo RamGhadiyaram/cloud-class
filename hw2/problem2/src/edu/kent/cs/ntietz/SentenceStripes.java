@@ -38,13 +38,13 @@ public class SentenceStripes
                     if (i != j)
                     {
                         Text other = new Text(words.get(j));
-                        if (stripe.get(other) == null)
+                        if (!stripe.containsKey(other))
                         {
                             stripe.put(other, new IntWritable(1));
                         }
                         else
                         {
-                            stripe.put(other, new IntWritable(((IntWritable)stripe.get(current)).get()+1));
+                            stripe.put(other, new IntWritable(((IntWritable)stripe.get(other)).get()+1));
                         }
                     }
                 }

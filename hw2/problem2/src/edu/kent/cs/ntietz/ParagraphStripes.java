@@ -44,7 +44,7 @@ public class ParagraphStripes
                         }
                         else
                         {
-                            stripe.put(other, new IntWritable(((IntWritable)stripe.get(current)).get()+1));
+                            stripe.put(other, new IntWritable(((IntWritable)stripe.get(other)).get()+1));
                         }
                     }
                 }
