@@ -9,7 +9,7 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
 
-public class Stripes
+public class ParagraphStripes
 {
 
     public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, MapWritable>
@@ -99,7 +99,7 @@ public class Stripes
     public static void main(String... args)
     throws IOException
     {
-        JobConf conf = new JobConf(Stripes.class);
+        JobConf conf = new JobConf(ParagraphStripes.class);
         conf.setJobName("partc-stripes");
 
         conf.setOutputKeyClass(Text.class);
