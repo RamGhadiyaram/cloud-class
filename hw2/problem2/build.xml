@@ -1,5 +1,5 @@
 
-<project name="hw2-pairs" default="compile" basedir=".">
+<project name="hw2" default="compile" basedir=".">
     <description>
         A simple build file for Hadoop projects.
     </description>
@@ -40,7 +40,7 @@
     <target name="jar" depends="init,compile"
         description="Jars the compiled project.">
 
-        <jar destfile="${dist}/pairs.jar"> <!-- CHANGE THIS -->
+        <jar destfile="${dist}/jobs.jar">
             <fileset dir="${build}" />
         </jar>
 
