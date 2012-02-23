@@ -35,8 +35,8 @@ public class LineStripes
 
         conf.setNumReduceTasks(8);
 
-        FileInputFormat.setInputPaths(conf, new Path(args[0]));
-        FileOutputFormat.setOutputPath(conf, new Path(args[1]));
+        FileInputFormat.setInputPaths(conf, new Path(args[1]));
+        FileOutputFormat.setOutputPath(conf, new Path(args[2]));
         FileOutputFormat.setCompressOutput(conf, false);
 
         JobClient.runJob(conf);
