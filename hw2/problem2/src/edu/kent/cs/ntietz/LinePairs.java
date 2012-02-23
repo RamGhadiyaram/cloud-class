@@ -11,7 +11,7 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
 
-public class Pairs
+public class LinePairs
 {
     public static class KeyPair implements WritableComparable
     {
@@ -131,7 +131,7 @@ public class Pairs
     public static void main(String... args)
     throws IOException
     {
-        JobConf conf = new JobConf(Pairs.class);
+        JobConf conf = new JobConf(LinePairs.class);
         conf.setJobName("parta-pairs");
 
         conf.setOutputKeyClass(KeyPair.class);
