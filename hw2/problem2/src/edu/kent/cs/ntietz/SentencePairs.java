@@ -13,37 +13,6 @@ import org.apache.hadoop.util.*;
 
 public class SentencePairs
 {
-    public static class Reduce extends MapReduceBase implements Reducer<KeyPair, IntWritable, Text, Text>
-    {
-        private int totalCounts = 0;
-
-        public void reduce(KeyPair key, Iterator<IntWritable> values, OutputCollector<Text, Text> output, Reporter reporter)
-        throws IOException
-        {
-            if (key.marginal)
-            {
-                totalCounts = 0;
-                while (values.hasNext())
-                {
-                    totalCounts += values.next().get();
-                }
-            }
-            else
-            {
-                int sum = 0;
-                while (values.hasNext())
-                {
-                    sum += values.next().get();
-                }
-                double probability = ((double)sum) / totalCounts;
-
-                String outputPair = key.left + "," + key.right;
-                String outputText = sum + "," + probability;
-                output.collect(new Text(outputPair), new Text(outputText));
-            }
-        }
-    }
-
     public static void main(String... args)
     throws IOException
     {
@@ -54,7 +23,7 @@ public class SentencePairs
         conf.setOutputValueClass(IntWritable.class);
 
         conf.setMapperClass(PairMapper.class);
-        conf.setReducerClass(Reduce.class);
+        conf.setReducerClass(PairReducer.class);
 
         conf.setInputFormat(SentenceInputFormat.class);
         conf.setOutputFormat(TextOutputFormat.class);
