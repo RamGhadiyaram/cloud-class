@@ -23,7 +23,14 @@ public class LineStripes
         conf.setMapperClass(StripeMapper.class);
         conf.setReducerClass(StripeReducer.class);
 
-        conf.setInputFormat(TextInputFormat.class);
+        if (args[0].equals("line")) {
+            conf.setInputFormat(TextInputFormat.class);
+        } else if (args[0].equals("sentence")) {
+            conf.setInputFormat(SentenceInputFormat.class);
+        } else if (args[0].equals("paragraph")) {
+            conf.setInputFormat(ParagraphInputFormat.class);
+        }
+
         conf.setOutputFormat(TextOutputFormat.class);
 
         conf.setNumReduceTasks(8);
