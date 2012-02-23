@@ -38,7 +38,7 @@ public class LineStripes
                     if (i != j)
                     {
                         Text other = new Text(words.get(j));
-                        if (stripe.get(other) == null)
+                        if (!stripe.containsKey(other))
                         {
                             stripe.put(other, new IntWritable(1));
                         }
