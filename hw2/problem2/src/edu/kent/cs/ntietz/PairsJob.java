@@ -11,12 +11,12 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
 
-public class LinePairs
+public class PairsJob
 {
     public static void main(String... args)
     throws IOException
     {
-        JobConf conf = new JobConf(LinePairs.class);
+        JobConf conf = new JobConf(PairsJob.class);
         conf.setJobName("parta-pairs");
 
         conf.setOutputKeyClass(KeyPair.class);
