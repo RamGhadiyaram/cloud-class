@@ -25,7 +25,7 @@ public class EnronJob
         conf.setMapperClass(EnronMapper.class);
         conf.setReducerClass(EnronReducer.class);
 
-        conf.setInputFormat(TextInputFormat.class); // TODO: change this
+        conf.setInputFormat(EnronFileInputFormat.class); // TODO: change this
         conf.setOutputFormat(TextOutputFormat.class);
 
         conf.setNumReduceTasks(8);
