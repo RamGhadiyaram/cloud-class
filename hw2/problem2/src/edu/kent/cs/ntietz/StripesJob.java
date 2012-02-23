@@ -9,13 +9,13 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
 
-public class ParagraphStripes
+public class StripesJob
 {
     public static void main(String... args)
     throws IOException
     {
-        JobConf conf = new JobConf(ParagraphStripes.class);
-        conf.setJobName("partc-stripes");
+        JobConf conf = new JobConf(LineStripes.class);
+        conf.setJobName("parta-stripes");
 
         conf.setOutputKeyClass(Text.class);
         conf.setOutputValueClass(MapWritable.class);
@@ -23,13 +23,20 @@ public class ParagraphStripes
         conf.setMapperClass(StripeMapper.class);
         conf.setReducerClass(StripeReducer.class);
 
-        conf.setInputFormat(ParagraphInputFormat.class);
+        if (args[0].equals("line")) {
+            conf.setInputFormat(TextInputFormat.class);
+        } else if (args[0].equals("sentence")) {
+            conf.setInputFormat(SentenceInputFormat.class);
+        } else if (args[0].equals("paragraph")) {
+            conf.setInputFormat(ParagraphInputFormat.class);
+        }
+
         conf.setOutputFormat(TextOutputFormat.class);
 
         conf.setNumReduceTasks(8);
 
-        FileInputFormat.setInputPaths(conf, new Path(args[0]));
-        FileOutputFormat.setOutputPath(conf, new Path(args[1]));
+        FileInputFormat.setInputPaths(conf, new Path(args[1]));
+        FileOutputFormat.setOutputPath(conf, new Path(args[2]));
         FileOutputFormat.setCompressOutput(conf, false);
 
         JobClient.runJob(conf);
