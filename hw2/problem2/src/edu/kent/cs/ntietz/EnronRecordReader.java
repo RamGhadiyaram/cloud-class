@@ -85,7 +85,7 @@ public class EnronRecordReader
             if (line.toString().length() > 0)
             {
                 String lineValue = line.toString();
-                result += " " + lineValue;
+                result += lineValue + "\n";
             }
         }
 

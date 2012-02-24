@@ -17,7 +17,18 @@ implements Mapper<LongWritable, Text, KeyPair, IntWritable>
 {
     public void map(LongWritable key, Text value, OutputCollector<KeyPair, IntWritable> output, Reporter reporter)
     {
+        String email = value.toString();
+        List<String> lines = Arrays.asList(email.split("\\n"));
 
+        // strip out the message header - remove it until we get to an empty line
+        while (!lines.get(0).equals(""))
+        {
+            lines.remove(0);
+        }
+
+        // find the co-occurrences for the entire email, use stripes
+
+        // emit all the stripes
     }
 }
 
