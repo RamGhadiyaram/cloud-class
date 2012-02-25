@@ -25,13 +25,13 @@ public class EnronJob
         conf.setMapperClass(EnronMapper.class);
         conf.setReducerClass(EnronReducer.class);
 
-        conf.setInputFormat(EnronFileInputFormat.class); // TODO: change this
+        conf.setInputFormat(EnronFileInputFormat.class);
         conf.setOutputFormat(TextOutputFormat.class);
 
         conf.setNumReduceTasks(8);
 
-        FileInputFormat.setInputPaths(conf, new Path(args[1]));
-        FileOutputFormat.setOutputPath(conf, new Path(args[2]));
+        FileInputFormat.setInputPaths(conf, new Path(args[0]));
+        FileOutputFormat.setOutputPath(conf, new Path(args[1]));
         FileOutputFormat.setCompressOutput(conf, false); 
 
         JobClient.runJob(conf);

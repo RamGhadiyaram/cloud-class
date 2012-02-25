@@ -25,12 +25,13 @@ implements Mapper<LongWritable, Text, Text, MapWritable>
         Map<String,MapWritable> counts = new HashMap<String,MapWritable>();
 
         String email = value.toString();
-        List<String> lines = Arrays.asList(email.split("\\n"));
+        String[] aLines = email.split("\\n");
 
-        // strip out the message header - remove it until we get to an empty line
-        while (!lines.get(0).equals(""))
+        // strips out the message header, which is of a consistent length
+        List<String> lines = new ArrayList<String>();
+        for (int i = 0; i < aLines.length; ++i)
         {
-            lines.remove(0);
+            lines.add(aLines[i]);
         }
 
         String body = "";
