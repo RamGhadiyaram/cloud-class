@@ -1,0 +1,13 @@
+
+This is my submission for HW2. It is organized as follows:
+* lib/      contains the jar needed to compile with Hadoop
+* dist/     contains the compiled jar of the project
+* build/    contains the compiled classes
+* src/      contains the sourcecode for all the files.
+
+The jobs for the various parts of the homework are as follows:
+edu.kent.cs.ntietz.PairsJob
+edu.kent.cs.ntietz.StripesJob
+These then take commandline arguments to set them up for the different parts of the assignment.
+
+
