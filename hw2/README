@@ -1,13 +1,48 @@
 
+This README will explain how my project is laid out and how to run each part of the submission.
+Attached in the pics/ directory are the screenshots of the running jobs.
+
+PROJECT SETUP
+
 This is my submission for HW2. It is organized as follows:
 * lib/      contains the jar needed to compile with Hadoop
 * dist/     contains the compiled jar of the project
 * build/    contains the compiled classes
-* src/      contains the sourcecode for all the files.
+* src/      contains the sourcecode for all the files
+* pics/     contains the screenshots of the running jobs
+* build.xml is the buildfile for the project
 
 The jobs for the various parts of the homework are as follows:
-edu.kent.cs.ntietz.PairsJob
-edu.kent.cs.ntietz.StripesJob
+*   edu.kent.cs.ntietz.PairsJob
+*   edu.kent.cs.ntietz.StripesJob
 These then take commandline arguments to set them up for the different parts of the assignment.
 
+
+HOW TO RUN
+
+To compile my code, run "ant jar". If you do not want to recompile, I have included the appropriate jar file already.
+To run problems, run the following from the directory in which "build.xml" is located.
+
+For problem 1, run this (replacing the paths with where the input/output should go):
+hadoop jar dist/jobs.jar edu.kent.cs.ntietz.PairsJob line /path/to/input /path/to/output
+hadoop jar dist/jobs.jar edu.kent.cs.ntietz.StripesJob line /path/to/input /path/to/output
+These run with the pairs and stripes algorithms, respectively.
+
+For problem 2a, run this (replacing the paths with where the input/output should go):
+hadoop jar dist/jobs.jar edu.kent.cs.ntietz.PairsJob line /path/to/input /path/to/output
+hadoop jar dist/jobs.jar edu.kent.cs.ntietz.StripesJob line /path/to/input /path/to/output
+These run with the pairs and stripes algorithms, respectively.
+
+For problem 2b, run this (replacing the paths with where the input/output should go):
+hadoop jar dist/jobs.jar edu.kent.cs.ntietz.PairsJob sentence /path/to/input /path/to/output
+hadoop jar dist/jobs.jar edu.kent.cs.ntietz.StripesJob sentence /path/to/input /path/to/output
+These run with the pairs and stripes algorithms, respectively.
+
+For problem 2c, run this (replacing the paths with where the input/output should go):
+hadoop jar dist/jobs.jar edu.kent.cs.ntietz.PairsJob paragraph /path/to/input /path/to/output
+hadoop jar dist/jobs.jar edu.kent.cs.ntietz.StripesJob paragraph /path/to/input /path/to/output
+These run with the pairs and stripes algorithms, respectively.
+
+For the bonus Enron job, run this (replacing the paths with where the input/output should go):
+hadoop jar dist/jobs.jar edu.kent.cs.ntietz.EnronJob /path/to/input /path/to/output
 
