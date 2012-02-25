@@ -14,7 +14,7 @@ public class StripesJob
     public static void main(String... args)
     throws IOException
     {
-        JobConf conf = new JobConf(LineStripes.class);
+        JobConf conf = new JobConf(StripesJob.class);
         conf.setJobName("parta-stripes");
 
         conf.setOutputKeyClass(Text.class);
