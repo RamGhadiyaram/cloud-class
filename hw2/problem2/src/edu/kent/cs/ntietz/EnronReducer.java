@@ -13,9 +13,9 @@ import org.apache.hadoop.util.*;
 
 public class EnronReducer
 extends MapReduceBase
-implements Reducer<KeyPair, IntWritable, Text, Text>
+implements Reducer<Text, MapWritable, Text, Text>
 {
-    public void reduce(KeyPair key, Iterator<IntWritable> values, OutputCollector<Text, Text> output, Reporter reporter)
+    public void reduce(Text key, Iterator<MapWritable> values, OutputCollector<Text, Text> output, Reporter reporter)
     {
 
     }

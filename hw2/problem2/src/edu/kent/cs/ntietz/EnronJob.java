@@ -19,8 +19,8 @@ public class EnronJob
         JobConf conf = new JobConf(EnronJob.class);
         conf.setJobName("enron-email-processing");
 
-        conf.setOutputKeyClass(KeyPair.class);
-        conf.setOutputValueClass(IntWritable.class);
+        conf.setOutputKeyClass(Text.class);
+        conf.setOutputValueClass(MapWritable.class);
 
         conf.setMapperClass(EnronMapper.class);
         conf.setReducerClass(EnronReducer.class);
