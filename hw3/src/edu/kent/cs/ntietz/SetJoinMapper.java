@@ -1,9 +1,9 @@
 package edu.kent.cs.ntietz;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
-import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.*;
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
@@ -20,7 +20,7 @@ implements Mapper<LongWritable, Text, Text, Text>
                    )
     throws IOException
     {
-
+        output.collect(new Text(String.valueOf(key)), value);
     }
 }
 
