@@ -7,16 +7,28 @@ import org.apache.hadoop.mapred.*;
 
 public class GraphMapper
 extends MapReduceBase
-implements Mapper<LongWritable, Text, Node, AdjacencyList>
+implements Mapper<LongWritable, Text, Node, Node>
 {
     public void map( LongWritable key
                    , Text line
-                   , OutputCollector<Node, AdjacencyList> output
+                   , OutputCollector<Node, Node> output
                    , Reporter reporter
                    )
     throws IOException
     {
+        // for our data set, this results in a size-3 array:
+        //  values => { lineNumber, node following, node being followed }
+        String[] values = line.toString().split("[\\s,]+");
 
+        Node start = new Node();
+        start.name = values[1];
+        start.score = 0.0;
+
+        Node destination = new Node();
+        destination.name = values[2];
+        destination.score = 0.0;
+
+        output.collect(start, destination);
     }
 }
 
