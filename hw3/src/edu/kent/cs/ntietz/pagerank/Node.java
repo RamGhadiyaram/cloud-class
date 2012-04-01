@@ -8,6 +8,9 @@ import org.apache.hadoop.io.*;
 public class Node
 implements WritableComparable
 {
+    public static final int numberOfNodes = 1131681;
+    public static final double defaultWeight = 1.0 / numberOfNodes;
+
     public String name;
     public double score;
     public boolean previous = false;
