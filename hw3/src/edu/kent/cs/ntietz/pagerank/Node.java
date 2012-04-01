@@ -17,6 +17,7 @@ implements WritableComparable
     {
         out.writeUTF(name);
         out.writeDouble(score);
+        out.writeBoolean(previous);
     }
 
     public void readFields(DataInput in)
@@ -24,6 +25,7 @@ implements WritableComparable
     {
         name = in.readUTF();
         score = in.readDouble();
+        previous = in.readBoolean();
     }
 
     public int compareTo(Object obj)
