@@ -20,19 +20,27 @@ public class PageRankJob
         String inputEdgePath;
         String outputPath;
 
-        JobConf conf = new JobConf(PageRankJob.class);
-        conf.setJobName("pagerank-job");
+        // MAKE THE GRAPH
 
-        conf.setOutputKeyClass(Text.class);
-        conf.setOutputValueClass(Text.class);
+        {
 
-        conf.setMapperClass(PageRankMapper.class);
-        conf.setReducerClass(PageRankReducer.class);
+            JobConf conf = new JobConf(PageRankJob.class);
+            conf.setJobName("pagerank-graph-parsing");
 
-        conf.setInputFormat(TextInputFormat.class);
-        conf.setOutputFormat(TextOutputFormat.class);
+            conf.setOutputKeyClass(Text.class);
+            conf.setOutputValueClass(Text.class);
 
-        conf.setNumReduceTasks(8);
+            conf.setMapperClass(PageRankMapper.class);
+            conf.setReducerClass(PageRankReducer.class);
+
+            conf.setInputFormat(TextInputFormat.class);
+            conf.setOutputFormat(TextOutputFormat.class);
+
+            conf.setNumReduceTasks(8);
+
+        }
+
+        // DO DAT MAPPING AND REDUCING, RANK DEM PAGES
 
         //conf.set("property", "value");
 

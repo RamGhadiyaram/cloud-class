@@ -9,17 +9,20 @@ public class Node
 implements WritableComparable
 {
     public String name;
+    public double score;
 
     public void write(DataOutput out)
     throws IOException
     {
         out.writeUTF(name);
+        out.writeDouble(score);
     }
 
     public void readFields(DataInput in)
     throws IOException
     {
         name = in.readUTF();
+        score = in.readDouble();
     }
 
     public int compareTo(Object obj)
