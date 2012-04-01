@@ -34,7 +34,9 @@ implements WritableComparable
 
             // ensure that we can get the previous score sorted first
             if (name.equals(other.name) && previous)
+            {
                 return -1;
+            }
 
             return name.compareTo(other.name);
         }
