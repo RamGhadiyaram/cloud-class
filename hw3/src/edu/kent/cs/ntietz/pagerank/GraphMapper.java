@@ -5,7 +5,7 @@ import java.io.*;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 
-public class PageRankMapper
+public class GraphMapper
 extends MapReduceBase
 implements Mapper<LongWritable, Text, Node, AdjacencyList>
 {

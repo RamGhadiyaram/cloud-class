@@ -6,7 +6,7 @@ import java.util.*;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 
-public class PageRankReducer
+public class GraphReducer
 extends MapReduceBase
 implements Reducer<Node, AdjacencyList, Node, AdjacencyList>
 {
