@@ -10,6 +10,7 @@ implements WritableComparable
 {
     public String name;
     public double score;
+    public boolean previous = false;
 
     public void write(DataOutput out)
     throws IOException
@@ -30,6 +31,10 @@ implements WritableComparable
         if (obj instanceof Node)
         {
             Node other = (Node) obj;
+
+            // ensure that we can get the previous score sorted first
+            if (name.equals(other.name) && previous)
+                return -1;
 
             return name.compareTo(other.name);
         }

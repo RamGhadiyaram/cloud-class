@@ -16,9 +16,8 @@ public class PageRankJob
     {
         // handle args
 
-        String inputNodePath;
-        String inputEdgePath;
-        String outputPath;
+        String inputPath = args[0];
+        String outputPath = args[1];
 
         // MAKE THE GRAPH
 
@@ -30,13 +29,18 @@ public class PageRankJob
             conf.setOutputKeyClass(Text.class);
             conf.setOutputValueClass(Text.class);
 
-            conf.setMapperClass(PageRankMapper.class);
-            conf.setReducerClass(PageRankReducer.class);
+            conf.setMapperClass(GraphMapper.class);
+            conf.setReducerClass(GraphReducer.class);
 
             conf.setInputFormat(TextInputFormat.class);
             conf.setOutputFormat(TextOutputFormat.class);
 
             conf.setNumReduceTasks(8);
+
+            FileInputFormat.setInputPaths(conf, new Path(inputPath));
+            FileOutputFormat.setOutputPath(conf, new Path(outputPath));
+            
+            JobClient.runJob(conf);
 
         }
 

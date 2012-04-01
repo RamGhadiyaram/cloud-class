@@ -17,7 +17,18 @@ implements Reducer<Node, Node, Node, AdjacencyList>
                       )
     throws IOException
     {
-        
+        List<String> neighbors = new ArrayList<String>();
+
+        while (values.hasNext())
+        {
+            neighbors.add(values.next().name);
+        }
+
+        AdjacencyList list = new AdjacencyList();
+        list.node = key.name;
+        list.neighbors = neighbors;
+
+        output.collect(key, list);
     }
 }
 

@@ -8,10 +8,10 @@ import org.apache.hadoop.mapred.*;
 
 public class PageRankReducer
 extends MapReduceBase
-implements Reducer<Node, AdjacencyList, Node, AdjacencyList>
+implements Reducer<Node, Node, Node, AdjacencyList>
 {
     public void reduce( Node key
-                      , Iterator<AdjacencyList> values
+                      , Iterator<Node> values
                       , OutputCollector<Node, AdjacencyList> output
                       , Reporter reporter
                       )

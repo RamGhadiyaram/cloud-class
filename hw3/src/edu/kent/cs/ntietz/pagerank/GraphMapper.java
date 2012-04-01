@@ -9,6 +9,9 @@ public class GraphMapper
 extends MapReduceBase
 implements Mapper<LongWritable, Text, Node, Node>
 {
+    public static final int numberOfNodes = 1131681;
+    public static final double defaultWeight = 1.0 / numberOfNodes;
+
     public void map( LongWritable key
                    , Text line
                    , OutputCollector<Node, Node> output
@@ -22,11 +25,11 @@ implements Mapper<LongWritable, Text, Node, Node>
 
         Node start = new Node();
         start.name = values[1];
-        start.score = 0.0;
+        start.score = defaultWeight;
 
         Node destination = new Node();
         destination.name = values[2];
-        destination.score = 0.0;
+        destination.score = defaultWeight;
 
         output.collect(start, destination);
     }

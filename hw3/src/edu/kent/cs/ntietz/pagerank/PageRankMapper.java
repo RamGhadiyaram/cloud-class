@@ -7,11 +7,11 @@ import org.apache.hadoop.mapred.*;
 
 public class PageRankMapper
 extends MapReduceBase
-implements Mapper<LongWritable, Text, Node, AdjacencyList>
+implements Mapper<Node, AdjacencyList, Node, Node>
 {
-    public void map( LongWritable key
-                   , Text line
-                   , OutputCollector<Node, AdjacencyList> output
+    public void map( Node key
+                   , AdjacencyList value
+                   , OutputCollector<Node, Node> output
                    , Reporter reporter
                    )
     throws IOException
