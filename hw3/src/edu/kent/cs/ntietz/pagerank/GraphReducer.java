@@ -21,14 +21,11 @@ implements Reducer<Text, Text, Text, Node>
         node.name = key;
         node.score = Node.defaultWeight;
         
-
-
-
         List<String> neighbors = new ArrayList<String>();
 
         while (values.hasNext())
         {
-            neighbors.add(values.next().name);
+            neighbors.add(values.next().toString());
         }
 
         AdjacencyList list = new AdjacencyList();
