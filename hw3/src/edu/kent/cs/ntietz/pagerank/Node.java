@@ -6,7 +6,7 @@ import java.util.*;
 import org.apache.hadoop.io.*;
 
 public class Node
-implements WritableComparable
+implements Writable
 {
     public static final int numberOfNodes = 1131681;
     public static final double defaultWeight = 1.0 / numberOfNodes;
@@ -30,7 +30,7 @@ implements WritableComparable
         score = in.readDouble();
         neighbors.readFields(in);
     }
-
+/*
     public int compareTo(Object obj)
     {
         if (obj instanceof Node)
@@ -63,5 +63,6 @@ implements WritableComparable
     {
         return name.hashCode();
     }
+*/
 }
 
