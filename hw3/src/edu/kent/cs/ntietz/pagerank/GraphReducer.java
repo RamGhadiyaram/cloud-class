@@ -18,7 +18,7 @@ implements Reducer<Text, Text, Text, Node>
     throws IOException
     {
         Node node = new Node();
-        node.name = key;
+        node.name = key.toString();
         node.score = Node.defaultWeight;
         
         List<String> neighbors = new ArrayList<String>();
@@ -29,10 +29,11 @@ implements Reducer<Text, Text, Text, Node>
         }
 
         AdjacencyList list = new AdjacencyList();
-        list.node = key.name;
-        list.neighbors = neighbors;
+        list.members = neighbors;
 
-        output.collect(key, list);
+        node.neighbors = list;
+
+        output.collect(key, node);
     }
 }
 

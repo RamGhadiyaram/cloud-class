@@ -6,6 +6,7 @@ import java.util.*;
 import org.apache.hadoop.io.*;
 
 public class Contribution
+implements Writable
 {
     public boolean isScore = true;
     public String name;
@@ -42,7 +43,7 @@ public class Contribution
             node.readFields(in);
         }
     }
-
+/*
     public int compareTo(Object obj)
     {
         if (obj instanceof Contribution)
@@ -82,5 +83,6 @@ public class Contribution
     {
         return name.hashCode();
     }
+*/
 }
 

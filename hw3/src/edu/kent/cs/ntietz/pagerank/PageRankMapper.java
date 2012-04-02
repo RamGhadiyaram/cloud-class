@@ -9,29 +9,30 @@ public class PageRankMapper
 extends MapReduceBase
 implements Mapper<Text, Node, Text, Contribution>
 {
-    public void map( Node key
-                   , AdjacencyList value
-                   , OutputCollector<Node, Node> output
+    public void map( Text key
+                   , Node value
+                   , OutputCollector<Text, Contribution> output
                    , Reporter reporter
                    )
     throws IOException
     {
-        int numberOfNeighbors = value.neighbors.size();
-        double contribution = key.score / numberOfNeighbors;
+        int numberOfNeighbors = value.neighbors.members.size();
+        double contributionScore = value.score / numberOfNeighbors;
 
-        key.previous = true;
-        output.collect(key, key);
+        Contribution current = new Contribution();
+        current.name = key.toString();
+        current.isScore = false;
+        current.node = value;
 
-        Node contributor = new Node();
-        contributor.name = key.name;
-        contributor.score = contribution;
+        output.collect(key, current);
 
-        for (String each : value.neighbors)
+        Contribution contribution = new Contribution();
+        contribution.score = contributionScore;
+
+        for (String each : value.neighbors.members)
         {
-            Node neighbor = new Node();
-            neighbor.name = each;
-
-            output.collect(neighbor, contributor);
+            contribution.name = each;
+            output.collect(new Text(each), contribution);
         }
     }
 }

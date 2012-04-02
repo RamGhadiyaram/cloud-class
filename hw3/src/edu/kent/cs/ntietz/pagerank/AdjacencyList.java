@@ -8,13 +8,13 @@ import org.apache.hadoop.io.*;
 public class AdjacencyList
 implements Writable
 {
-    public List<String> neighbors;
+    public List<String> members;
 
     public void write(DataOutput out)
     throws IOException
     {
-        out.writeInt(neighbors.size());
-        for (String each : neighbors)
+        out.writeInt(members.size());
+        for (String each : members)
         {
             out.writeUTF(each);
         }
@@ -24,10 +24,10 @@ implements Writable
     throws IOException
     {
         int listSize = in.readInt();
-        neighbors = new ArrayList<String>(listSize);
+        members = new ArrayList<String>(listSize);
         for (int index = 0; index < listSize; ++index)
         {
-            neighbors.add(in.readUTF());
+            members.add(in.readUTF());
         }
     }
 }

@@ -12,26 +12,33 @@ implements Reducer<Text, Contribution, Text, Node>
 {
     private double score = 0.0;
 
-    public void reduce( Node key
-                      , Iterator<Node> values
-                      , OutputCollector<Node, AdjacencyList> output
+    public void reduce( Text key
+                      , Iterator<Contribution> values
+                      , OutputCollector<Text, Node> output
                       , Reporter reporter
                       )
     throws IOException
     {
-        if (key.previous)
-        {
-            score = key.score;
-        }
-        else
-        {
-            while (values.hasNext())
-            {
-                Node contribution = values.next();
+        Node node = new Node();
+        double score = 0.0;
 
+        while (values.hasNext())
+        {
+            Contribution contribution = values.next();
+
+            if (!contribution.isScore)
+            {
+                node = contribution.node;
+            }
+            else
+            {
                 score += contribution.score;
             }
         }
+
+        // TODO add random surfing adjustment
+
+        output.collect(key, node);
     }
 }
 
