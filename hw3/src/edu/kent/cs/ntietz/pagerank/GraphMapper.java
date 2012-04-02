@@ -7,11 +7,11 @@ import org.apache.hadoop.mapred.*;
 
 public class GraphMapper
 extends MapReduceBase
-implements Mapper<LongWritable, Text, Node, Node>
+implements Mapper<LongWritable, Text, Text, Text>
 {
     public void map( LongWritable key
                    , Text line
-                   , OutputCollector<Node, Node> output
+                   , OutputCollector<Text, Text> output
                    , Reporter reporter
                    )
     throws IOException
@@ -20,15 +20,10 @@ implements Mapper<LongWritable, Text, Node, Node>
         //  values => { lineNumber, node following, node being followed }
         String[] values = line.toString().split("[\\s,]+");
 
-        Node start = new Node();
-        start.name = values[1];
-        start.score = Node.defaultWeight;
+        String start = values[1];
+        String destination = values[2];
 
-        Node destination = new Node();
-        destination.name = values[2];
-        destination.score = Node.defaultWeight;
-
-        output.collect(start, destination);
+        output.collect(new Text(start), new Text(destination));
     }
 }
 

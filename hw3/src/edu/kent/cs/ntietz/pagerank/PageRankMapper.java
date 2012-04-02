@@ -7,7 +7,7 @@ import org.apache.hadoop.mapred.*;
 
 public class PageRankMapper
 extends MapReduceBase
-implements Mapper<Node, AdjacencyList, Node, Node>
+implements Mapper<Text, Node, Text, Contribution>
 {
     public void map( Node key
                    , AdjacencyList value
@@ -16,7 +16,23 @@ implements Mapper<Node, AdjacencyList, Node, Node>
                    )
     throws IOException
     {
+        int numberOfNeighbors = value.neighbors.size();
+        double contribution = key.score / numberOfNeighbors;
 
+        key.previous = true;
+        output.collect(key, key);
+
+        Node contributor = new Node();
+        contributor.name = key.name;
+        contributor.score = contribution;
+
+        for (String each : value.neighbors)
+        {
+            Node neighbor = new Node();
+            neighbor.name = each;
+
+            output.collect(neighbor, contributor);
+        }
     }
 }
 

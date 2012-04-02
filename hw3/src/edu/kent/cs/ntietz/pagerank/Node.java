@@ -13,14 +13,14 @@ implements WritableComparable
 
     public String name;
     public double score;
-    public boolean previous = false;
+    public AdjacencyList neighbors = new AdjacencyList();
 
     public void write(DataOutput out)
     throws IOException
     {
         out.writeUTF(name);
         out.writeDouble(score);
-        out.writeBoolean(previous);
+        neighbors.write(out);
     }
 
     public void readFields(DataInput in)
@@ -28,7 +28,7 @@ implements WritableComparable
     {
         name = in.readUTF();
         score = in.readDouble();
-        previous = in.readBoolean();
+        neighbors.readFields(in);
     }
 
     public int compareTo(Object obj)
@@ -36,12 +36,6 @@ implements WritableComparable
         if (obj instanceof Node)
         {
             Node other = (Node) obj;
-
-            // ensure that we can get the previous score sorted first
-            if (name.equals(other.name) && previous)
-            {
-                return -1;
-            }
 
             return name.compareTo(other.name);
         }
