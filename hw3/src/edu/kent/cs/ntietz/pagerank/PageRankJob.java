@@ -16,12 +16,13 @@ public class PageRankJob
     {
         // handle args
 
-        String inputPath = args[0];
-        String outputPath = args[1];
+        String inputPath = args[1];
+        String outputPath = args[2];
 
-        // MAKE THE GRAPH
 
+        if (args[0].equals("parse"))
         {
+            // MAKE THE GRAPH
 
             JobConf conf = new JobConf(PageRankJob.class);
             conf.setJobName("pagerank-graph-parsing");
@@ -35,7 +36,7 @@ public class PageRankJob
             conf.setInputFormat(TextInputFormat.class);
             conf.setOutputFormat(TextOutputFormat.class);
 
-            conf.setNumReduceTasks(8);
+            conf.setNumReduceTasks(1);
 
             FileInputFormat.setInputPaths(conf, new Path(inputPath));
             FileOutputFormat.setOutputPath(conf, new Path(outputPath));
@@ -43,20 +44,27 @@ public class PageRankJob
             JobClient.runJob(conf);
 
         }
+        else if (args[0].equals("pagerank"))
+        {
+            for (int count = 0; count < 2; ++count)
+            {
+                JobConf conf = new JobConf(PageRankJob.class);
+                conf.setJobName("pageranking");
 
-        // DO DAT MAPPING AND REDUCING, RANK DEM PAGES
+                conf.setMapperClass(GraphMapper.class);
+                conf.setReducerClass(GraphReducer.class);
+
+                conf.setInputFormat(TextInputFormat.class);
+                conf.setOutputFormat(TextOutputFormat.class);
+
+                conf.setNumReduceTasks(8);
+
+                FileInputFormat.setInputPaths(conf, new Path(inputPath));
+                FileOutputFormat.setOutputPath(conf, new Path(outputPath + count));
+            }
+        }
 
         //conf.set("property", "value");
-
-        /*
-
-            1. parse the edges, nodes from two files
-                -> output adjacency lists for each node
-
-            2. do pagerank until satisfied (50 rounds OR convergent)
-
-        */
-
     }
 
 }

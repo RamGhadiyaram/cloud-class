@@ -16,12 +16,10 @@ implements Mapper<LongWritable, Text, Text, Text>
                    )
     throws IOException
     {
-        // for our data set, this results in a size-3 array:
-        //  values => { lineNumber, node following, node being followed }
-        String[] values = line.toString().split("[\\s,]+");
+        String[] values = line.toString().split(",");
 
-        String start = values[1];
-        String destination = values[2];
+        String start = values[0];
+        String destination = values[1];
 
         output.collect(new Text(start), new Text(destination));
     }

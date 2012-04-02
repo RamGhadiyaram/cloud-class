@@ -30,6 +30,25 @@ implements Writable
         score = in.readDouble();
         neighbors.readFields(in);
     }
+
+    public String toString()
+    {
+        String result = "";
+
+        result += name;
+        result += " ";
+
+        result += score;
+        result += " ";
+
+        for (String each : neighbors.members)
+        {
+            result += each + ", ";
+        }
+
+        return result;
+    }
+
 /*
     public int compareTo(Object obj)
     {
