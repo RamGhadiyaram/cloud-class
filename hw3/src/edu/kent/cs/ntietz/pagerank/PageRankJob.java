@@ -50,7 +50,7 @@ public class PageRankJob
 
         inputPath = outputGraphPath;
 
-        for (int count = 0; count < 5; ++count)
+        for (int count = 0; count < 25; ++count)
         {
             conf = new JobConf(PageRankJob.class);
             conf.setJobName("pageranking");

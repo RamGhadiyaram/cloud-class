@@ -47,9 +47,11 @@ implements Reducer<LongWritable, Contribution, LongWritable, Node>
             }
         }
 
-        node.score = score;
-
         // TODO add random surfing adjustment
+
+        // TODO increment counter here for how different the old score and the new score are, so we can measure convergence
+
+        node.score = score;
 
         output.collect(key, node);
     }
