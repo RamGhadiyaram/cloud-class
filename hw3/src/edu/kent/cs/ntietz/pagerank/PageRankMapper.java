@@ -7,11 +7,11 @@ import org.apache.hadoop.mapred.*;
 
 public class PageRankMapper
 extends MapReduceBase
-implements Mapper<Text, Node, Text, Contribution>
+implements Mapper<LongWritable, Node, LongWritable, Contribution>
 {
-    public void map( Text key
+    public void map( LongWritable key
                    , Node value
-                   , OutputCollector<Text, Contribution> output
+                   , OutputCollector<LongWritable, Contribution> output
                    , Reporter reporter
                    )
     throws IOException
@@ -32,7 +32,7 @@ implements Mapper<Text, Node, Text, Contribution>
         for (String each : value.neighbors.members)
         {
             contribution.name = each;
-            output.collect(new Text(each), contribution);
+            output.collect(new LongWritable(Long.valueOf(each)), contribution);
         }
     }
 }

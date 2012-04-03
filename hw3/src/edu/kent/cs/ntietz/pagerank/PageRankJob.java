@@ -27,14 +27,17 @@ public class PageRankJob
             JobConf conf = new JobConf(PageRankJob.class);
             conf.setJobName("pagerank-graph-parsing");
 
-            conf.setOutputKeyClass(Text.class);
-            conf.setOutputValueClass(Text.class);
+            conf.setMapOutputKeyClass(LongWritable.class);
+            conf.setMapOutputValueClass(Text.class);
+
+            conf.setOutputKeyClass(LongWritable.class);
+            conf.setOutputValueClass(Node.class);
 
             conf.setMapperClass(GraphMapper.class);
             conf.setReducerClass(GraphReducer.class);
 
             conf.setInputFormat(TextInputFormat.class);
-            conf.setOutputFormat(TextOutputFormat.class);
+            conf.setOutputFormat(SequenceFileOutputFormat.class);
 
             conf.setNumReduceTasks(1);
 
@@ -46,21 +49,31 @@ public class PageRankJob
         }
         else if (args[0].equals("pagerank"))
         {
-            for (int count = 0; count < 2; ++count)
+            for (int count = 0; count < 5; ++count)
             {
                 JobConf conf = new JobConf(PageRankJob.class);
                 conf.setJobName("pageranking");
 
-                conf.setMapperClass(GraphMapper.class);
-                conf.setReducerClass(GraphReducer.class);
+                conf.setMapOutputKeyClass(LongWritable.class);
+                conf.setMapOutputValueClass(Contribution.class);
 
-                conf.setInputFormat(TextInputFormat.class);
-                conf.setOutputFormat(TextOutputFormat.class);
+                conf.setOutputKeyClass(LongWritable.class);
+                conf.setOutputValueClass(Node.class);
 
-                conf.setNumReduceTasks(8);
+                conf.setMapperClass(PageRankMapper.class);
+                conf.setReducerClass(PageRankReducer.class);
+
+                conf.setInputFormat(SequenceFileInputFormat.class);
+                conf.setOutputFormat(SequenceFileOutputFormat.class);
+
+                conf.setNumReduceTasks(1);
 
                 FileInputFormat.setInputPaths(conf, new Path(inputPath));
                 FileOutputFormat.setOutputPath(conf, new Path(outputPath + count));
+
+                JobClient.runJob(conf);
+
+                inputPath = outputPath + count;
             }
         }
 

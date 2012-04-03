@@ -8,7 +8,8 @@ import org.apache.hadoop.io.*;
 public class Node
 implements Writable
 {
-    public static final int numberOfNodes = 1131681;
+    public static final int numberOfNodes = 10;
+    // TODO: make this update automatically
     public static final double defaultWeight = 1.0 / numberOfNodes;
 
     public String name;
@@ -35,16 +36,18 @@ implements Writable
     {
         String result = "";
 
-        result += name;
-        result += " ";
+        result += "name: " + name;
+        result += ";\t";
 
-        result += score;
-        result += " ";
+        result += "score: " + score;
+        result += ";\t";
 
+        result += "neighbors: ";
         for (String each : neighbors.members)
         {
-            result += each + ", ";
+            result += each + " ";
         }
+        result += "\t";
 
         return result;
     }

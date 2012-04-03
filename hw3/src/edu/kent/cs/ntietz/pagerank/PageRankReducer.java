@@ -8,13 +8,13 @@ import org.apache.hadoop.mapred.*;
 
 public class PageRankReducer
 extends MapReduceBase
-implements Reducer<Text, Contribution, Text, Node>
+implements Reducer<LongWritable, Contribution, LongWritable, Node>
 {
     private double score = 0.0;
 
-    public void reduce( Text key
+    public void reduce( LongWritable key
                       , Iterator<Contribution> values
-                      , OutputCollector<Text, Node> output
+                      , OutputCollector<LongWritable, Node> output
                       , Reporter reporter
                       )
     throws IOException
@@ -35,6 +35,8 @@ implements Reducer<Text, Contribution, Text, Node>
                 score += contribution.score;
             }
         }
+
+        node.score = score;
 
         // TODO add random surfing adjustment
 

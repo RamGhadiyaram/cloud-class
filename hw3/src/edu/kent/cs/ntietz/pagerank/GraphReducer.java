@@ -8,11 +8,11 @@ import org.apache.hadoop.mapred.*;
 
 public class GraphReducer
 extends MapReduceBase
-implements Reducer<Text, Text, Text, Node>
+implements Reducer<LongWritable, Text, LongWritable, Node>
 {
-    public void reduce( Text key
+    public void reduce( LongWritable key
                       , Iterator<Text> values
-                      , OutputCollector<Text, Node> output
+                      , OutputCollector<LongWritable, Node> output
                       , Reporter reporter
                       )
     throws IOException
