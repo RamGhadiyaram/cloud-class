@@ -33,6 +33,8 @@ implements Reducer<LongWritable, Text, LongWritable, Node>
 
         node.neighbors = list;
 
+        reporter.incrCounter("NUMBER", "NODES",1);
+
         output.collect(key, node);
     }
 }

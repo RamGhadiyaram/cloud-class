@@ -21,6 +21,8 @@ implements Mapper<LongWritable, Text, LongWritable, Text>
         String start = values[0];
         String destination = values[1];
 
+        reporter.incrCounter("NUMBER","EDGES",1);
+
         output.collect(new LongWritable(Long.valueOf(start)), new Text(destination));
     }
 }
