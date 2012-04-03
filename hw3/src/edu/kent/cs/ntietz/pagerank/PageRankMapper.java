@@ -29,6 +29,8 @@ implements Mapper<LongWritable, Node, LongWritable, Contribution>
         Contribution contribution = new Contribution();
         contribution.score = contributionScore;
 
+        reporter.incrCounter("NUMBER", "NODES", 1);
+
         for (String each : value.neighbors.members)
         {
             contribution.name = each;

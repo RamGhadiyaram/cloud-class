@@ -11,6 +11,12 @@ extends MapReduceBase
 implements Reducer<LongWritable, Contribution, LongWritable, Node>
 {
     private double score = 0.0;
+    private long numberOfNodes = 1;
+
+    public void configure(JobConf conf)
+    {
+        numberOfNodes = Long.valueOf(conf.get("numberOfNodes"));
+    }
 
     public void reduce( LongWritable key
                       , Iterator<Contribution> values
@@ -32,6 +38,11 @@ implements Reducer<LongWritable, Contribution, LongWritable, Node>
             }
             else
             {
+                // if score is negative, it was Node.DEFAULT, so we use 1.0 / numberOfNodes instead
+                if (contribution.score < 0)
+                {
+                    contribution.score = (contribution.score * -1.0 / numberOfNodes);
+                }
                 score += contribution.score;
             }
         }

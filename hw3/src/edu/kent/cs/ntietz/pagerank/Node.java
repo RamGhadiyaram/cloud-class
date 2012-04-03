@@ -8,9 +8,7 @@ import org.apache.hadoop.io.*;
 public class Node
 implements Writable
 {
-    public static final int numberOfNodes = 10;
-    // TODO: make this update automatically
-    public static final double defaultWeight = 1.0 / numberOfNodes;
+    public static final double DEFAULT = -1.0;
 
     public String name;
     public double score;

@@ -16,67 +16,73 @@ public class PageRankJob
     {
         // handle args
 
-        String inputPath = args[1];
-        String outputPath = args[2];
+        String inputPath = args[0];
+        String outputGraphPath = args[1] + "/graph";
+        String outputTmpPath = args[1] + "/tmp";
+        Long numberOfNodes = new Long(1);
 
+        JobConf conf = new JobConf(PageRankJob.class);
+        conf.setJobName("pagerank-graph-parsing");
 
-        if (args[0].equals("parse"))
+        conf.setMapOutputKeyClass(LongWritable.class);
+        conf.setMapOutputValueClass(Text.class);
+
+        conf.setOutputKeyClass(LongWritable.class);
+        conf.setOutputValueClass(Node.class);
+
+        conf.setMapperClass(GraphMapper.class);
+        conf.setReducerClass(GraphReducer.class);
+
+        conf.setInputFormat(TextInputFormat.class);
+        conf.setOutputFormat(SequenceFileOutputFormat.class);
+
+        conf.setNumReduceTasks(1);
+
+        //conf.set("mapred.reduce.slowstart.completed.maps", "1.0");
+
+        FileInputFormat.setInputPaths(conf, new Path(inputPath));
+        FileOutputFormat.setOutputPath(conf, new Path(outputGraphPath));
+        
+        RunningJob job = JobClient.runJob(conf);
+        job.waitForCompletion();
+
+        numberOfNodes = job.getCounters().findCounter("NUMBER", "NODES").getCounter();
+
+        inputPath = outputGraphPath;
+
+        for (int count = 0; count < 5; ++count)
         {
-            // MAKE THE GRAPH
-
-            JobConf conf = new JobConf(PageRankJob.class);
-            conf.setJobName("pagerank-graph-parsing");
+            conf = new JobConf(PageRankJob.class);
+            conf.setJobName("pageranking");
 
             conf.setMapOutputKeyClass(LongWritable.class);
-            conf.setMapOutputValueClass(Text.class);
+            conf.setMapOutputValueClass(Contribution.class);
 
             conf.setOutputKeyClass(LongWritable.class);
             conf.setOutputValueClass(Node.class);
 
-            conf.setMapperClass(GraphMapper.class);
-            conf.setReducerClass(GraphReducer.class);
+            conf.setMapperClass(PageRankMapper.class);
+            conf.setReducerClass(PageRankReducer.class);
 
-            conf.setInputFormat(TextInputFormat.class);
+            conf.setInputFormat(SequenceFileInputFormat.class);
             conf.setOutputFormat(SequenceFileOutputFormat.class);
 
             conf.setNumReduceTasks(1);
 
+            // TODO set number of nodes
+
+            //conf.set("mapred.reduce.slowstart.completed.maps", "1.0");
+
+            conf.set("numberOfNodes", numberOfNodes.toString());
+
             FileInputFormat.setInputPaths(conf, new Path(inputPath));
-            FileOutputFormat.setOutputPath(conf, new Path(outputPath));
-            
-            JobClient.runJob(conf);
+            FileOutputFormat.setOutputPath(conf, new Path(outputTmpPath + count));
 
+            job = JobClient.runJob(conf);
+            job.waitForCompletion();
+
+            inputPath = outputTmpPath + count;
         }
-        else if (args[0].equals("pagerank"))
-        {
-            for (int count = 0; count < 5; ++count)
-            {
-                JobConf conf = new JobConf(PageRankJob.class);
-                conf.setJobName("pageranking");
-
-                conf.setMapOutputKeyClass(LongWritable.class);
-                conf.setMapOutputValueClass(Contribution.class);
-
-                conf.setOutputKeyClass(LongWritable.class);
-                conf.setOutputValueClass(Node.class);
-
-                conf.setMapperClass(PageRankMapper.class);
-                conf.setReducerClass(PageRankReducer.class);
-
-                conf.setInputFormat(SequenceFileInputFormat.class);
-                conf.setOutputFormat(SequenceFileOutputFormat.class);
-
-                conf.setNumReduceTasks(1);
-
-                FileInputFormat.setInputPaths(conf, new Path(inputPath));
-                FileOutputFormat.setOutputPath(conf, new Path(outputPath + count));
-
-                JobClient.runJob(conf);
-
-                inputPath = outputPath + count;
-            }
-        }
-
         //conf.set("property", "value");
     }
 

@@ -19,7 +19,7 @@ implements Reducer<LongWritable, Text, LongWritable, Node>
     {
         Node node = new Node();
         node.name = key.toString();
-        node.score = Node.defaultWeight;
+        node.score = Node.DEFAULT;
         
         List<String> neighbors = new ArrayList<String>();
 
