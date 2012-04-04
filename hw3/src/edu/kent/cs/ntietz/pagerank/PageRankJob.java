@@ -16,6 +16,8 @@ public class PageRankJob
     {
         // handle args
 
+        Double alpha = Double.valueOf(args[2]);
+
         String inputPath = args[0];
         String outputGraphPath = args[1] + "/graph";
         String outputTmpPath = args[1] + "/tmp";
@@ -69,11 +71,10 @@ public class PageRankJob
 
             conf.setNumReduceTasks(1);
 
-            // TODO set number of nodes
-
             //conf.set("mapred.reduce.slowstart.completed.maps", "1.0");
 
             conf.set("numberOfNodes", numberOfNodes.toString());
+            conf.set("alpha", alpha.toString());
 
             FileInputFormat.setInputPaths(conf, new Path(inputPath));
             FileOutputFormat.setOutputPath(conf, new Path(outputTmpPath + count));
@@ -83,7 +84,6 @@ public class PageRankJob
 
             inputPath = outputTmpPath + count;
         }
-        //conf.set("property", "value");
     }
 
 }

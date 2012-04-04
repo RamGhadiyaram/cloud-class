@@ -12,10 +12,12 @@ implements Reducer<LongWritable, Contribution, LongWritable, Node>
 {
     private double score = 0.0;
     private long numberOfNodes = 1;
+    private double alpha = 0.0;
 
     public void configure(JobConf conf)
     {
         numberOfNodes = Long.valueOf(conf.get("numberOfNodes"));
+        alpha = Double.valueOf(conf.get("alpha"));
     }
 
     public void reduce( LongWritable key
@@ -47,9 +49,26 @@ implements Reducer<LongWritable, Contribution, LongWritable, Node>
             }
         }
 
-        // TODO add random surfing adjustment
+        score = alpha + (1-alpha) * score;
+
+        // this only occurs in the first round if a node was followed with no followers
+        if (node == null)
+        {
+            node = new Node();
+            node.name = key.toString();
+            node.neighbors = new AdjacencyList();
+        }
+
+        double difference = Math.abs(score - node.score);
+
+        long danglingUpdate = (long) node.score * numberOfNodes * Constants.inflationFactor;
+        long convergenceUpdate = (long) difference * numberOfNodes * Constants.inflationFactor;
+
+        reporter.incrCounter("WEIGHT", "CONVERGENCE", convergenceUpdate);
+        reporter.incrCounter("WEIGHT", "DANGLING", danglingUpdate);
 
         // TODO increment counter here for how different the old score and the new score are, so we can measure convergence
+        // TODO increment counter here for dangliing nodes
 
         node.score = score;
 

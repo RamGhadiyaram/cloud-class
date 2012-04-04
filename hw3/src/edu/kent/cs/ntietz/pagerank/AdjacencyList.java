@@ -8,7 +8,7 @@ import org.apache.hadoop.io.*;
 public class AdjacencyList
 implements Writable
 {
-    public List<String> members;
+    public List<String> members = new ArrayList<String>();
 
     public void write(DataOutput out)
     throws IOException
