@@ -24,6 +24,9 @@ implements Mapper<LongWritable, Text, LongWritable, Text>
         reporter.incrCounter("NUMBER","EDGES",1);
 
         output.collect(new LongWritable(Long.valueOf(start)), new Text(destination));
+
+        // make sure all dangling nodes are created
+        output.collect(new LongWritable(Long.valueOf(destination)), new Text(""));
     }
 }
 

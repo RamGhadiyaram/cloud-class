@@ -25,7 +25,12 @@ implements Reducer<LongWritable, Text, LongWritable, Node>
 
         while (values.hasNext())
         {
-            neighbors.add(values.next().toString());
+            String next = values.next().toString();
+
+            if (!next.equals(""))
+            {
+                neighbors.add(next);
+            }
         }
 
         AdjacencyList list = new AdjacencyList();
@@ -33,7 +38,12 @@ implements Reducer<LongWritable, Text, LongWritable, Node>
 
         node.neighbors = list;
 
-        reporter.incrCounter("NUMBER", "NODES",1);
+        reporter.incrCounter("NUMBER", "NODES", 1);
+
+        if (neighbors.size() == 0)
+        {
+            reporter.incrCounter("NUMBER", "DANGLING", 1);
+        }
 
         output.collect(key, node);
     }

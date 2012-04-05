@@ -13,11 +13,13 @@ implements Reducer<LongWritable, Contribution, LongWritable, Node>
     private double score = 0.0;
     private long numberOfNodes = 1;
     private double alpha = 0.0;
+    private double extraWeight = 0.0;
 
     public void configure(JobConf conf)
     {
         numberOfNodes = Long.valueOf(conf.get("numberOfNodes"));
         alpha = Double.valueOf(conf.get("alpha"));
+        extraWeight = Double.valueOf(conf.get("extraWeight"));
     }
 
     public void reduce( LongWritable key
@@ -51,18 +53,10 @@ implements Reducer<LongWritable, Contribution, LongWritable, Node>
 
         score = alpha + (1-alpha) * score;
 
-        // this only occurs in the first round if a node was followed with no followers
-        if (node == null)
-        {
-            node = new Node();
-            node.name = key.toString();
-            node.neighbors = new AdjacencyList();
-        }
-
         double difference = Math.abs(score - node.score);
 
-        long danglingUpdate = (long) node.score * numberOfNodes * Constants.inflationFactor;
-        long convergenceUpdate = (long) difference * numberOfNodes * Constants.inflationFactor;
+        long danglingUpdate = (long) (node.score * numberOfNodes * Constants.inflationFactor);
+        long convergenceUpdate = (long) (difference * numberOfNodes * Constants.inflationFactor);
 
         reporter.incrCounter("WEIGHT", "CONVERGENCE", convergenceUpdate);
         reporter.incrCounter("WEIGHT", "DANGLING", danglingUpdate);

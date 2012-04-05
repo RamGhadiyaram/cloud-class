@@ -22,6 +22,7 @@ public class PageRankJob
         String outputGraphPath = args[1] + "/graph";
         String outputTmpPath = args[1] + "/tmp";
         Long numberOfNodes = new Long(1);
+        Long numberDangling = new Long(1);
 
         JobConf conf = new JobConf(PageRankJob.class);
         conf.setJobName("pagerank-graph-parsing");
@@ -49,10 +50,14 @@ public class PageRankJob
         job.waitForCompletion();
 
         numberOfNodes = job.getCounters().findCounter("NUMBER", "NODES").getCounter();
+        numberDangling = job.getCounters().findCounter("NUMBER", "DANGLING").getCounter();
 
         inputPath = outputGraphPath;
 
-        for (int count = 0; count < 25; ++count)
+        Double danglingWeight = ((double) numberDangling) / numberOfNodes;
+        double amountOfChange = 0.0;
+
+        for (int count = 0; count < 5; ++count)
         {
             conf = new JobConf(PageRankJob.class);
             conf.setJobName("pageranking");
@@ -75,6 +80,7 @@ public class PageRankJob
 
             conf.set("numberOfNodes", numberOfNodes.toString());
             conf.set("alpha", alpha.toString());
+            conf.set("extraWeight", danglingWeight.toString());
 
             FileInputFormat.setInputPaths(conf, new Path(inputPath));
             FileOutputFormat.setOutputPath(conf, new Path(outputTmpPath + count));
@@ -82,7 +88,16 @@ public class PageRankJob
             job = JobClient.runJob(conf);
             job.waitForCompletion();
 
+            danglingWeight = job.getCounters().findCounter("WEIGHT", "DANGLING").getCounter()
+                                / ((double) numberOfNodes * Constants.inflationFactor);
+            amountOfChange = job.getCounters().findCounter("WEIGHT", "CONVERGENCE").getCounter()
+                                / ((double) numberOfNodes * Constants.inflationFactor)
+                                / ((double) numberOfNodes);
+
             inputPath = outputTmpPath + count;
+
+            System.out.println("Recovering " + danglingWeight + " dangling weight next round.");
+            System.out.println("Only changed " + amountOfChange + " this round.");
         }
     }
 
