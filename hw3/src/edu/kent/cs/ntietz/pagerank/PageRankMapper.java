@@ -17,24 +17,32 @@ implements Mapper<LongWritable, Node, LongWritable, Contribution>
     throws IOException
     {
         int numberOfNeighbors = value.neighbors.members.size();
-        double contributionScore = value.score / numberOfNeighbors;
 
-        Contribution current = new Contribution();
-        current.name = key.toString();
-        current.isScore = false;
-        current.node = value;
-
-        output.collect(key, current);
-
-        Contribution contribution = new Contribution();
-        contribution.score = contributionScore;
-
-        reporter.incrCounter("NUMBER", "NODES", 1);
-
-        for (String each : value.neighbors.members)
+        if (numberOfNeighbors == 0)
         {
-            contribution.name = each;
-            output.collect(new LongWritable(Long.valueOf(each)), contribution);
+            // TODO: catch dangling nodes here!
+        }
+        else
+        {
+            double contributionScore = value.score / numberOfNeighbors;
+
+            Contribution current = new Contribution();
+            current.name = key.toString();
+            current.isScore = false;
+            current.node = value;
+            // TODO: clean this up
+            output.collect(key, current);
+
+            Contribution contribution = new Contribution();
+            contribution.score = contributionScore;
+
+            reporter.incrCounter("NUMBER", "NODES", 1);
+
+            for (String each : value.neighbors.members)
+            {
+                contribution.name = each;
+                output.collect(new LongWritable(Long.valueOf(each)), contribution);
+            }
         }
     }
 }

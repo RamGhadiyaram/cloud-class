@@ -54,7 +54,7 @@ public class PageRankJob
 
         inputPath = outputGraphPath;
 
-        Double danglingWeight = ((double) numberDangling) / numberOfNodes;
+        Double danglingWeight = ((double) numberDangling);
         double amountOfChange = 1.0;
 
         int round = 0;
@@ -83,7 +83,7 @@ public class PageRankJob
 
             conf.set("numberOfNodes", numberOfNodes.toString());
             conf.set("alpha", alpha.toString());
-            conf.set("extraWeight", danglingWeight.toString());
+            conf.set("extraWeight", new Double(danglingWeight/numberOfNodes).toString());
 
             FileInputFormat.setInputPaths(conf, new Path(inputPath));
             FileOutputFormat.setOutputPath(conf, new Path(outputTmpPath + round));
@@ -94,8 +94,7 @@ public class PageRankJob
             danglingWeight = job.getCounters().findCounter("WEIGHT", "DANGLING").getCounter()
                                 / ((double) numberOfNodes * Constants.inflationFactor);
             amountOfChange = job.getCounters().findCounter("WEIGHT", "CONVERGENCE").getCounter()
-                                / ((double) numberOfNodes * Constants.inflationFactor)
-                                / ((double) numberOfNodes);
+                                / ((double) numberOfNodes * Constants.inflationFactor);
 
             String toDelete = new String(inputPath);
             inputPath = outputTmpPath + round;

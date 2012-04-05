@@ -50,16 +50,19 @@ implements Reducer<LongWritable, Contribution, LongWritable, Node>
                 score += contribution.score;
             }
         }
+        score += extraWeight;
 
         score = alpha + (1-alpha) * score;
 
         double difference = Math.abs(score - node.score);
 
-        long danglingUpdate = (long) (node.score * numberOfNodes * Constants.inflationFactor);
-        long convergenceUpdate = (long) (difference * numberOfNodes * Constants.inflationFactor);
+        long danglingUpdate = (long) (node.score * (numberOfNodes * Constants.inflationFactor));
+        long convergenceUpdate = (long) (difference * (numberOfNodes * Constants.inflationFactor));
 
         reporter.incrCounter("WEIGHT", "CONVERGENCE", convergenceUpdate);
         reporter.incrCounter("WEIGHT", "DANGLING", danglingUpdate);
+
+        reporter.incrCounter("WEIGHT", "TOTAL", (long) ((score  * (numberOfNodes * Constants.inflationFactor))));
 
         // TODO increment counter here for how different the old score and the new score are, so we can measure convergence
         // TODO increment counter here for dangliing nodes
