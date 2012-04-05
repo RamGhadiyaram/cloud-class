@@ -60,6 +60,8 @@ public class PageRankJob
         int round = 0;
         double threshold = 0.01;
 
+        double extraWeight = danglingWeight;
+
         while (amountOfChange >= threshold && round < 3)
         {
             conf = new JobConf(PageRankJob.class);
@@ -83,7 +85,7 @@ public class PageRankJob
 
             conf.set("numberOfNodes", numberOfNodes.toString());
             conf.set("alpha", alpha.toString());
-            conf.set("extraWeight", new Double(danglingWeight/numberOfNodes).toString());
+            conf.set("extraWeight", new Double(extraWeight/numberOfNodes).toString());
 
             FileInputFormat.setInputPaths(conf, new Path(inputPath));
             FileOutputFormat.setOutputPath(conf, new Path(outputTmpPath + round));
@@ -95,6 +97,11 @@ public class PageRankJob
                                 / ((double) numberOfNodes * Constants.inflationFactor);
             amountOfChange = job.getCounters().findCounter("WEIGHT", "CONVERGENCE").getCounter()
                                 / ((double) numberOfNodes * Constants.inflationFactor);
+
+            double totalWeight = job.getCounters().findCounter("WEIGHT", "TOTAL").getCounter()
+                                / ((double) numberOfNodes * Constants.inflationFactor);
+
+            extraWeight = danglingWeight + (1.0 - totalWeight); // adjust for lost precision
 
             String toDelete = new String(inputPath);
             inputPath = outputTmpPath + round;

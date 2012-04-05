@@ -57,7 +57,7 @@ implements Reducer<LongWritable, Contribution, LongWritable, Node>
             node.score = 1.0 / numberOfNodes;
         }
 
-        //score = alpha + (1-alpha) * score;
+        score = alpha/numberOfNodes + (1-alpha) * score;
 
         double difference = Math.abs(score - node.score);
 
