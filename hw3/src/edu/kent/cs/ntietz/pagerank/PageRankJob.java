@@ -62,7 +62,7 @@ public class PageRankJob
 
         double extraWeight = danglingWeight;
 
-        while (amountOfChange >= threshold && round < 3)
+        while (amountOfChange >= threshold && round < 20)
         {
             conf = new JobConf(PageRankJob.class);
             conf.setJobName("pageranking");
@@ -110,7 +110,7 @@ public class PageRankJob
             System.out.println("Only changed " + amountOfChange + " this round.");
 
             FileSystem fs = FileSystem.get(new Configuration());
-            //fs.delete(new Path(toDelete), true);
+            fs.delete(new Path(toDelete), true);
 
             System.out.println("Deleted old directory (" + toDelete + ")");
 
