@@ -16,22 +16,18 @@ implements Mapper<LongWritable, Node, LongWritable, Contribution>
                    )
     throws IOException
     {
+        Contribution current = new Contribution();
+        current.name = key.toString();
+        current.isScore = false;
+        current.node = value;
+
+        output.collect(key, current);
+
         int numberOfNeighbors = value.neighbors.members.size();
 
-        if (numberOfNeighbors == 0)
-        {
-            // TODO: catch dangling nodes here!
-        }
-        else
+        if (numberOfNeighbors > 0)
         {
             double contributionScore = value.score / numberOfNeighbors;
-
-            Contribution current = new Contribution();
-            current.name = key.toString();
-            current.isScore = false;
-            current.node = value;
-            // TODO: clean this up
-            output.collect(key, current);
 
             Contribution contribution = new Contribution();
             contribution.score = contributionScore;

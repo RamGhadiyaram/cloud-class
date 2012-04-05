@@ -10,7 +10,6 @@ public class PageRankReducer
 extends MapReduceBase
 implements Reducer<LongWritable, Contribution, LongWritable, Node>
 {
-    private double score = 0.0;
     private long numberOfNodes = 1;
     private double alpha = 0.0;
     private double extraWeight = 0.0;
@@ -42,17 +41,23 @@ implements Reducer<LongWritable, Contribution, LongWritable, Node>
             }
             else
             {
-                // if score is negative, it was Node.DEFAULT, so we use 1.0 / numberOfNodes instead
+                // if score is negative, it was Node.DEFAULT/numberOfNeighbors, so we scale it to (1/numberOfNodes) / numberOfNeighbors
                 if (contribution.score < 0)
                 {
-                    contribution.score = (contribution.score * -1.0 / numberOfNodes);
+                    contribution.score = (contribution.score / (numberOfNodes * Node.DEFAULT));
                 }
                 score += contribution.score;
             }
         }
+        
         score += extraWeight;
 
-        score = alpha + (1-alpha) * score;
+        if (node.score < 0)
+        {
+            node.score = 1.0 / numberOfNodes;
+        }
+
+        //score = alpha + (1-alpha) * score;
 
         double difference = Math.abs(score - node.score);
 
@@ -60,12 +65,13 @@ implements Reducer<LongWritable, Contribution, LongWritable, Node>
         long convergenceUpdate = (long) (difference * (numberOfNodes * Constants.inflationFactor));
 
         reporter.incrCounter("WEIGHT", "CONVERGENCE", convergenceUpdate);
-        reporter.incrCounter("WEIGHT", "DANGLING", danglingUpdate);
+
+        if (node.isDangling())
+        {
+            reporter.incrCounter("WEIGHT", "DANGLING", danglingUpdate);
+        }
 
         reporter.incrCounter("WEIGHT", "TOTAL", (long) ((score  * (numberOfNodes * Constants.inflationFactor))));
-
-        // TODO increment counter here for how different the old score and the new score are, so we can measure convergence
-        // TODO increment counter here for dangliing nodes
 
         node.score = score;
 

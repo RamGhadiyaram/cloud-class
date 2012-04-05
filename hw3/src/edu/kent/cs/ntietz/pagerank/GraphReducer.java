@@ -35,7 +35,6 @@ implements Reducer<LongWritable, Text, LongWritable, Node>
 
         AdjacencyList list = new AdjacencyList();
         list.members = neighbors;
-
         node.neighbors = list;
 
         reporter.incrCounter("NUMBER", "NODES", 1);

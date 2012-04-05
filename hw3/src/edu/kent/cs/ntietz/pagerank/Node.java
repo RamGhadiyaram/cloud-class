@@ -50,6 +50,11 @@ implements Writable
         return result;
     }
 
+    public boolean isDangling()
+    {
+        return neighbors.members.size() == 0;
+    }
+
 /*
     public int compareTo(Object obj)
     {
