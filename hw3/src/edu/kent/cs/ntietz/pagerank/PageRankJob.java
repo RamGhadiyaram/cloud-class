@@ -55,9 +55,12 @@ public class PageRankJob
         inputPath = outputGraphPath;
 
         Double danglingWeight = ((double) numberDangling) / numberOfNodes;
-        double amountOfChange = 0.0;
+        double amountOfChange = 1.0;
 
-        for (int count = 0; count < 5; ++count)
+        int round = 0;
+        double threshold = 0.01;
+
+        while (amountOfChange >= threshold && round < 30)
         {
             conf = new JobConf(PageRankJob.class);
             conf.setJobName("pageranking");
@@ -83,7 +86,7 @@ public class PageRankJob
             conf.set("extraWeight", danglingWeight.toString());
 
             FileInputFormat.setInputPaths(conf, new Path(inputPath));
-            FileOutputFormat.setOutputPath(conf, new Path(outputTmpPath + count));
+            FileOutputFormat.setOutputPath(conf, new Path(outputTmpPath + round));
 
             job = JobClient.runJob(conf);
             job.waitForCompletion();
@@ -94,10 +97,18 @@ public class PageRankJob
                                 / ((double) numberOfNodes * Constants.inflationFactor)
                                 / ((double) numberOfNodes);
 
-            inputPath = outputTmpPath + count;
+            String toDelete = new String(inputPath);
+            inputPath = outputTmpPath + round;
 
             System.out.println("Recovering " + danglingWeight + " dangling weight next round.");
             System.out.println("Only changed " + amountOfChange + " this round.");
+
+            FileSystem fs = FileSystem.get(new Configuration());
+            fs.delete(new Path(toDelete), true);
+
+            System.out.println("Deleted old directory (" + toDelete + ")");
+
+            ++round;
         }
     }
 
