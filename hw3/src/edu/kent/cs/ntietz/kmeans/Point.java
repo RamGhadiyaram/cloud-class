@@ -19,6 +19,15 @@ public class Point<T>
         numberOfComponents = components.size();
     }
     
+    T getComponent(int i)
+    {
+        return components.get(i);
+    }
+
+    void setComponent(int i, T v)
+    {
+        components.set(i, v);
+    }
 
 }
 
