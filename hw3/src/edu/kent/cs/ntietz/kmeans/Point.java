@@ -29,5 +29,39 @@ public class Point<T>
         components.set(i, v);
     }
 
+    public int cardinality()
+    {
+        return components.size();
+    }
+
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof Point<?>)
+        {
+            Point<?> other = (Point<?>) obj;
+
+            if (cardinality() != other.cardinality())
+            {
+                return false;
+            }
+            else
+            {
+                for (int index = 0; index < cardinality(); ++index)
+                {
+                    if (!getComponent(index).equals(other.getComponent(index)))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 }
 
