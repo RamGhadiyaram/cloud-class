@@ -51,21 +51,5 @@ public class DataGenerator
         return points;
     }
 
-    /*
-    public static void main(String... args)
-    {
-        // args:
-        //  0   ->  number of points
-        //  1   ->  number of components
-        //  2   ->  
-        //
-        // handle parsing of arguments, printing usage, etc.
-
-        int numberOfPoints = Integer.valueOf(args[0]);
-        int numberOfComponents = Integer.valueOf(args[1]);
-
-        List<Point<Double>> points = new ArrayList<Point<Double>>(numberOfPoints);
-    }
-    */
 }
 
