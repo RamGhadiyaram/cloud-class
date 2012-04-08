@@ -1,5 +1,9 @@
 package edu.kent.cs.ntietz.kmeans;
 
+import org.apache.hadoop.fs.*;
+import org.apache.hadoop.conf.*;
+import org.apache.hadoop.io.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -16,6 +20,8 @@ public class DataGeneratorJob
         double lowerBound = Double.valueOf(args[3]);
         double upperBound = Double.valueOf(args[4]);
         long seed = 2012; // TODO change this, keep it fixed for testing
+
+        String outputPath = args[5];
 
         // TODO replace the rudimentary arg handling above
 
@@ -34,21 +40,24 @@ public class DataGeneratorJob
             System.out.println(each);
         }
 
-        //JobConf conf = new JobConf(DataGeneratorJob.class);
-        //conf.setJobName("kmeans-data-generation");
+        Configuration conf = new Configuration();
+        FileSystem fs = FileSystem.get(conf);
 
-        /*
-        conf.setMapOutputKeyClass(...);
-        conf.setMapOutputValueClass(...);
-        conf.setOutputKeyClass(...);
-        conf.setOutputValueClass(...);
+        SequenceFile.Writer writer =
+            new SequenceFile.Writer( fs
+                                   , conf
+                                   , new Path(outputPath)
+                                   , LongWritable.class
+                                   , Point.class
+                                   );
 
-        conf.setMapperClass(...);
-        conf.setReducerClass(...);
+        for (int index = 0; index < numberOfPoints; ++index)
+        {
+            writer.append(new LongWritable(index), dataset.get(index));
+        }
 
-        conf.setInputFormat(...);
-        conf.setOutputFormat(...);
-        */
+        writer.close();
+        
     }
 }
 
