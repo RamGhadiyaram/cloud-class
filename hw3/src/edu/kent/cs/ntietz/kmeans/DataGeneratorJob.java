@@ -29,6 +29,11 @@ public class DataGeneratorJob
                                           , seed
                                           );
 
+        for (Point each : dataset)
+        {
+            System.out.println(each);
+        }
+
         //JobConf conf = new JobConf(DataGeneratorJob.class);
         //conf.setJobName("kmeans-data-generation");
 

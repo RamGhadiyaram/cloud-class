@@ -15,6 +15,10 @@ implements Writable
     {
         numberOfComponents = n;
         components = new ArrayList<Double>(numberOfComponents);
+        for (int index = 0; index < numberOfComponents; ++index)
+        {
+            components.add(0.0);
+        }
     }
 
     public Point(List<Double> c)
@@ -58,6 +62,21 @@ implements Writable
             double value = in.readDouble();
             components.add(value);
         }
+    }
+
+    public String toString()
+    {
+        String result = "";
+        
+        result += "size: " + numberOfComponents + "; ";
+
+        result += "components: ";
+        for (double each : components)
+        {
+            result += each + "\t";
+        }
+
+        return result;
     }
 
     public boolean equals(Object obj)
