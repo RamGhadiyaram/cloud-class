@@ -21,15 +21,15 @@ public class DataGeneratorJob
 
         DataGenerator gen = new DataGenerator();
 
-        List<Point> dataset = gen.generate( numberOfCenters
-                                          , numberOfPoints
-                                          , numberOfComponents
-                                          , lowerBound
-                                          , upperBound
-                                          , seed
-                                          );
+        List<Point<Double>> dataset = gen.generate( numberOfCenters
+                                                  , numberOfPoints
+                                                  , numberOfComponents
+                                                  , lowerBound
+                                                  , upperBound
+                                                  , seed
+                                                  );
 
-        //
+        
     }
 }
 
