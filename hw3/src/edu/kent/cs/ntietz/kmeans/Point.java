@@ -1,30 +1,34 @@
 package edu.kent.cs.ntietz.kmeans;
 
+import org.apache.hadoop.io.*;
+
+import java.io.*;
 import java.util.*;
 
-public class Point<T>
+public class Point
+implements Writable
 {
-    private List<T> components;
+    private List<Double> components;
     int numberOfComponents;
 
     public Point(int n)
     {
         numberOfComponents = n;
-        components = new ArrayList<T>(numberOfComponents);
+        components = new ArrayList<Double>(numberOfComponents);
     }
 
-    public Point(List<T> c)
+    public Point(List<Double> c)
     {
         components = c;
         numberOfComponents = components.size();
     }
     
-    T getComponent(int i)
+    Double getComponent(int i)
     {
         return components.get(i);
     }
 
-    void setComponent(int i, T v)
+    void setComponent(int i, Double v)
     {
         components.set(i, v);
     }
@@ -34,11 +38,33 @@ public class Point<T>
         return components.size();
     }
 
+    public void write(DataOutput out)
+    throws IOException
+    {
+        out.writeInt(numberOfComponents);
+        for (int index = 0; index < numberOfComponents; ++index)
+        {
+            out.writeDouble(components.get(index));
+        }
+    }
+
+    public void readFields(DataInput in)
+    throws IOException
+    {
+        numberOfComponents = in.readInt();
+        components = new ArrayList<Double>(numberOfComponents);
+        for (int index = 0; index < numberOfComponents; ++index)
+        {
+            double value = in.readDouble();
+            components.add(value);
+        }
+    }
+
     public boolean equals(Object obj)
     {
-        if (obj instanceof Point<?>)
+        if (obj instanceof Point)
         {
-            Point<?> other = (Point<?>) obj;
+            Point other = (Point) obj;
 
             if (cardinality() != other.cardinality())
             {
@@ -62,6 +88,5 @@ public class Point<T>
             return false;
         }
     }
-
 }
 

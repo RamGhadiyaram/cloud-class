@@ -21,15 +21,29 @@ public class DataGeneratorJob
 
         DataGenerator gen = new DataGenerator();
 
-        List<Point<Double>> dataset = gen.generate( numberOfCenters
-                                                  , numberOfPoints
-                                                  , numberOfComponents
-                                                  , lowerBound
-                                                  , upperBound
-                                                  , seed
-                                                  );
+        List<Point> dataset = gen.generate( numberOfCenters
+                                          , numberOfPoints
+                                          , numberOfComponents
+                                          , lowerBound
+                                          , upperBound
+                                          , seed
+                                          );
 
-        
+        //JobConf conf = new JobConf(DataGeneratorJob.class);
+        //conf.setJobName("kmeans-data-generation");
+
+        /*
+        conf.setMapOutputKeyClass(...);
+        conf.setMapOutputValueClass(...);
+        conf.setOutputKeyClass(...);
+        conf.setOutputValueClass(...);
+
+        conf.setMapperClass(...);
+        conf.setReducerClass(...);
+
+        conf.setInputFormat(...);
+        conf.setOutputFormat(...);
+        */
     }
 }
 
