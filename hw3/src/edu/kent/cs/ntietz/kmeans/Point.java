@@ -42,6 +42,19 @@ implements Writable
         return components.size();
     }
 
+    public double distance(Point other)
+    {
+        double sumOfSquares = 0.0;
+
+        for (int index = 0; index < numberOfComponents; ++index)
+        {
+            double difference = getComponent(index) - other.getComponent(index);
+            sumOfSquares += difference * difference;
+        }
+
+        return Math.sqrt(sumOfSquares);
+    }
+
     public void write(DataOutput out)
     throws IOException
     {

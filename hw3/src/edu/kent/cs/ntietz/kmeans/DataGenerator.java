@@ -4,6 +4,7 @@ import java.util.*;
 
 public class DataGenerator
 {
+    private static final double clusterThreshold = 0.90; // 70% of points will be around centers
 
     public List<Point> generate( int numberOfCenters
                                , int numberOfPoints
@@ -20,8 +21,6 @@ public class DataGenerator
 
         for (int count = 0; count < numberOfCenters; ++count)
         {
-            // TODO: generate each center better.
-
             Point point = new Point(numberOfComponents);
 
             for (int index = 0; index < numberOfComponents; ++index)
@@ -36,13 +35,30 @@ public class DataGenerator
         for (int count = 0; count < numberOfPoints; ++count)
         {
             // TODO: generate each point better.
+            int centerIndex = random.nextInt(numberOfCenters);
+            Point center = centers.get(centerIndex);
 
             Point point = new Point(numberOfComponents);
 
-            for (int index = 0; index < numberOfComponents; ++index)
+            double score = random.nextDouble();
+
+            if (score < clusterThreshold)
             {
-                double value = lowerBound + (random.nextDouble() * (upperBound - lowerBound));
-                point.setComponent(index, value);
+                for (int index = 0; index < numberOfComponents; ++index)
+                {
+                    double value = lowerBound + (center.getComponent(index) + random.nextGaussian()*(upperBound-lowerBound)/12);
+                    while (value < lowerBound) value += (upperBound - lowerBound);
+                    while (value > upperBound) value -= (upperBound - lowerBound);
+                    point.setComponent(index, value);
+                }
+            }
+            else
+            {
+                for (int index = 0; index < numberOfComponents; ++index)
+                {
+                    double value = lowerBound + (random.nextDouble() * (upperBound - lowerBound));
+                    point.setComponent(index, value);
+                }
             }
 
             points.add(point);

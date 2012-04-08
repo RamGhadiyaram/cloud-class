@@ -27,6 +27,8 @@ public class DataGeneratorJob
 
         DataGenerator gen = new DataGenerator();
 
+        System.out.println("Generating data...");
+
         List<Point> dataset = gen.generate( numberOfCenters
                                           , numberOfPoints
                                           , numberOfComponents
@@ -35,10 +37,12 @@ public class DataGeneratorJob
                                           , seed
                                           );
 
-        for (Point each : dataset)
-        {
-            System.out.println(each);
-        }
+        System.out.println("Done generating data.");
+
+        //for (Point each : dataset)
+        //{
+        //    System.out.println(each);
+        //}
 
         Configuration conf = new Configuration();
         FileSystem fs = FileSystem.get(conf);
@@ -51,12 +55,16 @@ public class DataGeneratorJob
                                    , Point.class
                                    );
 
+        System.out.println("Writing to " + outputPath + ".");
+
         for (int index = 0; index < numberOfPoints; ++index)
         {
             writer.append(new LongWritable(index), dataset.get(index));
         }
 
         writer.close();
+
+        System.out.println("Finished writing.");
         
     }
 }
