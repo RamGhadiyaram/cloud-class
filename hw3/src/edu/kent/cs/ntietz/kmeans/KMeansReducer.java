@@ -15,7 +15,7 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
 
     private int numberOfCenters = 0;
     private List<Point> centers = new ArrayList<Point>();
-    private String outputDir;
+    private String centersDirectory;
 
     // reduce phase
 
@@ -27,31 +27,7 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
 
     public void configure(JobConf conf)
     {
-        numberOfCenters = Integer.valueOf(conf.get("numberOfCenters"));
-        outputDir = conf.get("outputDir");
-
-        // must try/catch since configure isn't allowed to throw exceptions
-        try
-        {
-            Configuration c = new Configuration();
-            FileSystem fs = FileSystem.get(c);
-
-            for (int index = 0; index < numberOfCenters; ++index)
-            {
-                SequenceFile.Writer writer =
-                    new SequenceFile.Writer( fs
-                                           , c
-                                           , new Path(outputDir + "/centers/" + index)
-                                           , LongWritable.class
-                                           , Point.class
-                                           );
-            }
-        }
-        catch(IOException e)
-        {
-            // do nothing
-            // I hope this doesn't happen
-        }
+        centersDirectory = conf.get("centersDirectory");
     }
 
     public void reduce( LongWritable key
@@ -61,7 +37,28 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
                       )
     throws IOException
     {
-        
+        // create a list of values
+        // create a running-average of the values in the iterator
+        // while doing this, output the unaltered values
+
+        // create a new center
+
+        // write out the new center
+        /*
+        Configuration c = new Configuration();
+        FileSystem fs = FileSystem.get(c);
+
+        for (int index = 0; index < numberOfCenters; ++index)
+        {
+            SequenceFile.Writer writer =
+                new SequenceFile.Writer( fs
+                                       , c
+                                       , new Path(outputDir + "/centers/" + index)
+                                       , LongWritable.class
+                                       , Point.class
+                                       );
+        }
+        */
     }
 
 }

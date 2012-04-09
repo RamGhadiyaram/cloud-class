@@ -1,6 +1,8 @@
 package edu.kent.cs.ntietz.kmeans;
 
 import org.apache.hadoop.io.*;
+import org.apache.hadoop.fs.*;
+import org.apache.hadoop.conf.*;
 import org.apache.hadoop.mapred.*;
 
 import java.io.*;
@@ -12,6 +14,7 @@ implements Mapper<LongWritable, Point, LongWritable, Point>
 {
     private int numberOfCenters = 0;
     private List<Point> centers = new ArrayList<Point>();
+    private String centersDirectory;
 
     // map :: [(long, point)] -> [(long, point)]
     // each long corresponds to which center it is closest to
@@ -25,10 +28,26 @@ implements Mapper<LongWritable, Point, LongWritable, Point>
     public void configure(JobConf conf)
     {
         numberOfCenters = Integer.valueOf(conf.get("numberOfCenters"));
+        centersDirectory = conf.get("centersDirectory");
         
-        for (int index = 0; index < numberOfCenters; ++index)
+        try
         {
-            // read in the center
+            Configuration c = new Configuration();
+            FileSystem fs = FileSystem.get(c);
+
+            for (int index = 0; index < numberOfCenters; ++index)
+            {
+                SequenceFile.Reader reader =
+                    new SequenceFile.Reader( fs
+                                           , new Path(centersDirectory)
+                                           , c
+                                           );
+            }
+        }
+        catch (IOException e)
+        {
+            // do nothing
+            // I hope this doesn't happen
         }
     }
 
