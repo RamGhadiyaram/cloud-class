@@ -10,10 +10,11 @@ import java.util.*;
 public class KMeansJob
 {
     public static void main(String... args)
+    throws IOException
     {
         // TODO handle args here
         String inputDirectory = args[0];
-        String outputDirectory = args[0];
+        String outputDirectory = args[1];
         int numberOfCenters = 0; // TODO
 
         int round = 0;
@@ -42,6 +43,9 @@ public class KMeansJob
 
             FileInputFormat.setInputPaths(conf, new Path(inputDirectory));
             FileOutputFormat.setOutputPath(conf, new Path(outputDirectory+"/points/"+round));
+
+            RunningJob job = JobClient.runJob(conf);
+            job.waitForCompletion();
 
             ++round;
         }

@@ -11,6 +11,12 @@ implements WritableComparable
     private List<Double> components;
     int numberOfComponents;
 
+    public Point()
+    {
+        components = null;
+        numberOfComponents = 0;
+    }
+
     public Point(int n)
     {
         numberOfComponents = n;

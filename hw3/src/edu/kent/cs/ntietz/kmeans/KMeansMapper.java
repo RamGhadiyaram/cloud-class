@@ -42,12 +42,22 @@ implements Mapper<LongWritable, Point, LongWritable, Point>
                                            , new Path(outputDirectory + "/centers/" + index)
                                            , c
                                            );
+
+                LongWritable key = new LongWritable();
+                Point value = new Point();
+
+                reader.next(key, value);
+
+                Point center = (Point) value;
+
+                centers.add(center);
             }
         }
         catch (IOException e)
         {
             // do nothing
             // I hope this doesn't happen
+            System.out.println("well, damn.");
         }
     }
 

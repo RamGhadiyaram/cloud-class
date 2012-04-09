@@ -60,19 +60,18 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
         Configuration c = new Configuration();
         FileSystem fs = FileSystem.get(c);
 
-        for (int index = 0; index < numberOfCenters; ++index)
-        {
-            String currentCenterDirectory = outputDirectory + "/centers/" + index;
-            fs.delete(new Path(currentCenterDirectory), true);
+        String currentCenterDirectory = outputDirectory + "/centers/" + key.toString();
+        fs.delete(new Path(currentCenterDirectory), true);
 
-            SequenceFile.Writer writer =
-                new SequenceFile.Writer( fs
-                                       , c
-                                       , new Path(currentCenterDirectory)
-                                       , LongWritable.class
-                                       , Point.class
-                                       );
-        }
+        SequenceFile.Writer writer =
+            new SequenceFile.Writer( fs
+                                   , c
+                                   , new Path(currentCenterDirectory)
+                                   , LongWritable.class
+                                   , Point.class
+                                   );
+
+        writer.append(key, center);
     }
 
 }
