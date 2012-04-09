@@ -1,12 +1,68 @@
 package edu.kent.cs.ntietz.kmeans;
 
+import org.apache.hadoop.fs.*;
 import org.apache.hadoop.io.*;
+import org.apache.hadoop.conf.*;
 import org.apache.hadoop.mapred.*;
+
+import java.io.*;
+import java.util.*;
 
 public class KMeansReducer
 extends MapReduceBase
 implements Reducer<LongWritable, Point, LongWritable, Point>
 {
+
+    private int numberOfCenters = 0;
+    private List<Point> centers = new ArrayList<Point>();
+    private String outputDir;
+
+    // reduce phase
+
+    // input: a center and all its points
+    // output: all the points with their center
+    // side-effect: update the centers
+
+    // centers are stored in : outputdir + "/centers/" + centerNumber
+
+    public void configure(JobConf conf)
+    {
+        numberOfCenters = Integer.valueOf(conf.get("numberOfCenters"));
+        outputDir = conf.get("outputDir");
+
+        // must try/catch since configure isn't allowed to throw exceptions
+        try
+        {
+            Configuration c = new Configuration();
+            FileSystem fs = FileSystem.get(c);
+
+            for (int index = 0; index < numberOfCenters; ++index)
+            {
+                SequenceFile.Writer writer =
+                    new SequenceFile.Writer( fs
+                                           , c
+                                           , new Path(outputDir + "/centers/" + index)
+                                           , LongWritable.class
+                                           , Point.class
+                                           );
+            }
+        }
+        catch(IOException e)
+        {
+            // do nothing
+            // I hope this doesn't happen
+        }
+    }
+
+    public void reduce( LongWritable key
+                      , Iterator<Point> values
+                      , OutputCollector<LongWritable, Point> output
+                      , Reporter reporter
+                      )
+    throws IOException
+    {
+        
+    }
 
 }
 

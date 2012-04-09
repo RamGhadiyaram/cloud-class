@@ -44,15 +44,20 @@ implements Writable
 
     public double distance(Point other)
     {
-        double sumOfSquares = 0.0;
+        return Math.sqrt(sumOfSquares(other));
+    }
+
+    public double sumOfSquares(Point other)
+    {
+        double sum = 0.0;
 
         for (int index = 0; index < numberOfComponents; ++index)
         {
             double difference = getComponent(index) - other.getComponent(index);
-            sumOfSquares += difference * difference;
+            sum += difference * difference;
         }
 
-        return Math.sqrt(sumOfSquares);
+        return sum;
     }
 
     public void write(DataOutput out)
