@@ -74,6 +74,5 @@ implements Mapper<LongWritable, Point, LongWritable, Point>
 
         output.collect(new LongWritable(best), value);
     }
-
 }
 

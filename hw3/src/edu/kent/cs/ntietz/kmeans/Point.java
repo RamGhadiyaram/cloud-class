@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.*;
 
 public class Point
-implements Writable
+implements WritableComparable
 {
     private List<Double> components;
     int numberOfComponents;
@@ -39,7 +39,7 @@ implements Writable
 
     public int cardinality()
     {
-        return components.size();
+        return numberOfComponents;
     }
 
     public double distance(Point other)
@@ -95,6 +95,38 @@ implements Writable
         }
 
         return result;
+    }
+
+    public int compareTo(Object obj)
+    {
+        if (obj instanceof Point)
+        {
+            Point other = (Point) obj;
+
+            if (cardinality() != other.cardinality())
+            {
+                return -1;
+            }
+            else
+            {
+                for (int index = 0; index < numberOfComponents; ++index)
+                {
+                    if (getComponent(index) < other.getComponent(index))
+                    {
+                        return -1;
+                    }
+                    else if (getComponent(index) > other.getComponent(index))
+                    {
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+        }
+        else
+        {
+            return -1;
+        }
     }
 
     public boolean equals(Object obj)

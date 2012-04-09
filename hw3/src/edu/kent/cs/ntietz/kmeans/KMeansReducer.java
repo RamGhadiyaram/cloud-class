@@ -37,8 +37,18 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
                       )
     throws IOException
     {
+        double average = 0.0;
+        long count = 0;
+
         // create a list of values
         // create a running-average of the values in the iterator
+        /*for (Point each : values)
+        {
+            ++count;
+
+            double sumOfSquares = each.sumOfSquares(center);
+            average = ((double)count-1)/count * average + 0.0; //TODO finish
+        }*/
         // while doing this, output the unaltered values
 
         // create a new center
