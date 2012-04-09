@@ -121,6 +121,18 @@ implements WritableComparable
         return result;
     }
 
+    public static Point divide(Point left, Point right)
+    {
+        Point result = new Point(left.cardinality());
+
+        for (int index = 0; index < left.cardinality(); ++index)
+        {
+            result.setComponent(index, left.getComponent(index) / right.getComponent(index));
+        }
+
+        return result;
+    }
+
     public int compareTo(Object obj)
     {
         if (obj instanceof Point)

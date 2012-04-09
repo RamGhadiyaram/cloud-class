@@ -62,15 +62,16 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
 
         for (int index = 0; index < numberOfCenters; ++index)
         {
+            String currentCenterDirectory = outputDirectory + "/centers/" + index;
+            fs.delete(new Path(currentCenterDirectory), true);
+
             SequenceFile.Writer writer =
                 new SequenceFile.Writer( fs
                                        , c
-                                       , new Path(outputDirectory + "/centers/" + index)
+                                       , new Path(currentCenterDirectory)
                                        , LongWritable.class
                                        , Point.class
                                        );
-
-
         }
     }
 
