@@ -15,7 +15,7 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
 
     private int numberOfCenters = 0;
     private List<Point> centers = new ArrayList<Point>();
-    private String centersDirectory;
+    private String outputDirectory;
 
     // reduce phase
 
@@ -27,7 +27,7 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
 
     public void configure(JobConf conf)
     {
-        centersDirectory = conf.get("centersDirectory");
+        outputDirectory = conf.get("outputDirectory");
     }
 
     public void reduce( LongWritable key
@@ -37,24 +37,26 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
                       )
     throws IOException
     {
-        double average = 0.0;
+        Point first = values.next();
+        Point sums = new Point(first.cardinality());
         long count = 0;
 
-        // create a list of values
-        // create a running-average of the values in the iterator
-        /*for (Point each : values)
+        sums = Point.add(sums, first);
+
+        while (values.hasNext())
         {
+            Point each = values.next();
+
+            sums = Point.add(sums, each);
             ++count;
 
-            double sumOfSquares = each.sumOfSquares(center);
-            average = ((double)count-1)/count * average + 0.0; //TODO finish
-        }*/
-        // while doing this, output the unaltered values
+            output.collect(key, each);
+        }
 
         // create a new center
+        Point center = Point.divide(sums, count);
 
         // write out the new center
-        /*
         Configuration c = new Configuration();
         FileSystem fs = FileSystem.get(c);
 
@@ -63,12 +65,13 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
             SequenceFile.Writer writer =
                 new SequenceFile.Writer( fs
                                        , c
-                                       , new Path(outputDir + "/centers/" + index)
+                                       , new Path(outputDirectory + "/centers/" + index)
                                        , LongWritable.class
                                        , Point.class
                                        );
+
+
         }
-        */
     }
 
 }

@@ -14,7 +14,7 @@ implements Mapper<LongWritable, Point, LongWritable, Point>
 {
     private int numberOfCenters = 0;
     private List<Point> centers = new ArrayList<Point>();
-    private String centersDirectory;
+    private String outputDirectory;
 
     // map :: [(long, point)] -> [(long, point)]
     // each long corresponds to which center it is closest to
@@ -28,7 +28,7 @@ implements Mapper<LongWritable, Point, LongWritable, Point>
     public void configure(JobConf conf)
     {
         numberOfCenters = Integer.valueOf(conf.get("numberOfCenters"));
-        centersDirectory = conf.get("centersDirectory");
+        outputDirectory = conf.get("outputDirectory");
         
         try
         {
@@ -39,7 +39,7 @@ implements Mapper<LongWritable, Point, LongWritable, Point>
             {
                 SequenceFile.Reader reader =
                     new SequenceFile.Reader( fs
-                                           , new Path(centersDirectory)
+                                           , new Path(outputDirectory + "/centers/" + index)
                                            , c
                                            );
             }
