@@ -43,6 +43,8 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
 
         sums = Point.add(sums, first);
 
+        output.collect(key, first);
+
         while (values.hasNext())
         {
             Point each = values.next();
@@ -62,6 +64,8 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
 
         String currentCenterDirectory = centersDirectory + "/centers/" + key.toString();
         fs.delete(new Path(currentCenterDirectory), true);
+
+        System.out.println(center.toString());
 
         SequenceFile.Writer writer =
             new SequenceFile.Writer( fs

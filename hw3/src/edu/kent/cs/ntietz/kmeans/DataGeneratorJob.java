@@ -17,7 +17,7 @@ public class DataGeneratorJob
         int numberOfComponents = Integer.valueOf(args[2]);
         double lowerBound = Double.valueOf(args[3]);
         double upperBound = Double.valueOf(args[4]);
-        long seed = 2012;
+        long seed = 201249;
         String outputPath = args[5];
 
         DataGenerator gen = new DataGenerator();

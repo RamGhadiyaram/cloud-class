@@ -16,7 +16,7 @@ public class KMeansJob
         String baseLocation = args[0];
 
         DataGeneratorJob.main( String.valueOf(numberOfCenters)
-                             , String.valueOf(numberOfCenters*1000)
+                             , String.valueOf(numberOfCenters*100000)
                              , String.valueOf(3)
                              , String.valueOf(0.0)
                              , String.valueOf(100.0)
@@ -58,6 +58,10 @@ public class KMeansJob
             job.waitForCompletion();
 
             ++round;
+
+            System.out.println("Round finished, current centers:");
+            CheckJob.main(currentLocation, String.valueOf(numberOfCenters));
+            System.out.println("");
 
             currentLocation = nextLocation;
             nextLocation = baseLocation + "/round" + round;

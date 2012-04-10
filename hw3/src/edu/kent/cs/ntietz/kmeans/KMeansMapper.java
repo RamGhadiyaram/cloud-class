@@ -85,6 +85,9 @@ implements Mapper<LongWritable, Point, LongWritable, Point>
             }
         }
 
+        reporter.incrCounter("NUMBER", "NODES", 1);
+        reporter.incrCounter("CENTER", ""+best, 1);
+
         output.collect(new LongWritable(best), value);
     }
 }
