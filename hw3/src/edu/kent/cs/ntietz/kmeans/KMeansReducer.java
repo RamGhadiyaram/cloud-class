@@ -15,7 +15,7 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
 
     private int numberOfCenters = 0;
     private List<Point> centers = new ArrayList<Point>();
-    private String outputDirectory;
+    private String centersDirectory;
 
     // reduce phase
 
@@ -27,7 +27,7 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
 
     public void configure(JobConf conf)
     {
-        outputDirectory = conf.get("outputDirectory");
+        centersDirectory = conf.get("centersWriteDirectory");
     }
 
     public void reduce( LongWritable key
@@ -60,7 +60,7 @@ implements Reducer<LongWritable, Point, LongWritable, Point>
         Configuration c = new Configuration();
         FileSystem fs = FileSystem.get(c);
 
-        String currentCenterDirectory = outputDirectory + "/centers/" + key.toString();
+        String currentCenterDirectory = centersDirectory + "/centers/" + key.toString();
         fs.delete(new Path(currentCenterDirectory), true);
 
         SequenceFile.Writer writer =

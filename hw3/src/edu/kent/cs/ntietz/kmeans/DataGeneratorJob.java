@@ -12,18 +12,13 @@ public class DataGeneratorJob
     public static void main(String... args)
     throws IOException
     {
-        // TODO handle args nicely here. perhaps import apache commons for arg handling.
-
         int numberOfCenters = Integer.valueOf(args[0]);
         int numberOfPoints = Integer.valueOf(args[1]);
         int numberOfComponents = Integer.valueOf(args[2]);
         double lowerBound = Double.valueOf(args[3]);
         double upperBound = Double.valueOf(args[4]);
-        long seed = 2012; // TODO change this, keep it fixed for testing
-
+        long seed = 2012;
         String outputPath = args[5];
-
-        // TODO replace the rudimentary arg handling above
 
         DataGenerator gen = new DataGenerator();
 
@@ -47,15 +42,17 @@ public class DataGeneratorJob
         Configuration conf = new Configuration();
         FileSystem fs = FileSystem.get(conf);
 
+        fs.delete(new Path(outputPath), true);
+
         SequenceFile.Writer writer =
             new SequenceFile.Writer( fs
                                    , conf
-                                   , new Path(outputPath)
+                                   , new Path(outputPath + "/points")
                                    , LongWritable.class
                                    , Point.class
                                    );
 
-        System.out.println("Writing to " + outputPath + ".");
+        System.out.println("Writing dataset to " + outputPath + "/points.");
 
         for (int index = 0; index < numberOfPoints; ++index)
         {
@@ -66,6 +63,22 @@ public class DataGeneratorJob
 
         System.out.println("Finished writing.");
         
+        System.out.println("Writing centers to " + outputPath + "/centers.");
+
+        
+        for (int index = 0; index < numberOfCenters; ++index)
+        {
+            writer =
+                new SequenceFile.Writer( fs
+                                       , conf
+                                       , new Path(outputPath + "/centers/" + index)
+                                       , LongWritable.class
+                                       , Point.class
+                                       );
+
+            writer.append(new LongWritable(index), dataset.get(index));
+            writer.close();
+        }
     }
 }
 

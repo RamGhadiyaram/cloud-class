@@ -12,14 +12,23 @@ public class KMeansJob
     public static void main(String... args)
     throws IOException
     {
-        // TODO handle args here
-        String inputDirectory = args[0];
-        String outputDirectory = args[1];
-        int numberOfCenters = 0; // TODO
+        int numberOfCenters = Integer.valueOf(args[1]);
+        String baseLocation = args[0];
+
+        DataGeneratorJob.main( String.valueOf(numberOfCenters)
+                             , String.valueOf(numberOfCenters*1000)
+                             , String.valueOf(3)
+                             , String.valueOf(0.0)
+                             , String.valueOf(100.0)
+                             , baseLocation + "/original"
+                             );
 
         int round = 0;
 
-        while (round < 1)
+        String currentLocation = baseLocation + "/original";
+        String nextLocation = baseLocation + "/round" + round;
+
+        while (round < 5)
         {
             JobConf conf = new JobConf(KMeansJob.class);
             conf.setJobName("kmeans");
@@ -39,15 +48,19 @@ public class KMeansJob
 
             conf.set("mapred.reduce.slowstart.completed.maps", "1.0");
             conf.set("numberOfCenters", String.valueOf(numberOfCenters));
-            conf.set("outputDirectory", outputDirectory);
+            conf.set("centersReadDirectory", currentLocation);
+            conf.set("centersWriteDirectory", nextLocation);
 
-            FileInputFormat.setInputPaths(conf, new Path(inputDirectory));
-            FileOutputFormat.setOutputPath(conf, new Path(outputDirectory+"/points/"+round));
+            FileInputFormat.setInputPaths(conf, new Path(currentLocation+"/points"));
+            FileOutputFormat.setOutputPath(conf, new Path(nextLocation+"/points"));
 
             RunningJob job = JobClient.runJob(conf);
             job.waitForCompletion();
 
             ++round;
+
+            currentLocation = nextLocation;
+            nextLocation = baseLocation + "/round" + round;
         }
     }
 }
